@@ -8,6 +8,7 @@ import { LineChart } from './LineChart';
 import { BarChart}  from './BarChart';
 import { Sample}  from './Sample';
 import StudentTable  from './StudentTable';
+import CategoryFilterWrapper  from './CategoryFilterWrapper';
 
 export default function AttendanceDashboard() {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -70,6 +71,9 @@ export default function AttendanceDashboard() {
           <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
             <Sample/>
           </Grid>
+          <Grid  item size={{ xs: 12, sm: 6, lg: 12 }}>
+            <CategoryFilterWrapper/>
+          </Grid>
         </Grid>
       </Box>
 
@@ -89,5 +93,6 @@ export default function AttendanceDashboard() {
         </Grid>
       </Grid>
     </Box>
+    
   );
 }
