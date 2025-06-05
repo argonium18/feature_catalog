@@ -9,6 +9,7 @@ import { BarChart}  from './BarChart';
 import { Sample}  from './Sample';
 import StudentTable  from './StudentTable';
 import CategoryFilterWrapper  from './CategoryFilterWrapper';
+import ChurnDashboardWrapper  from './ChurnDashboardWrapper';
 
 export default function AttendanceDashboard() {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -94,6 +95,16 @@ export default function AttendanceDashboard() {
             selectedRows={selectedRows}
             onSelectionChange={setSelectedRows}
           />
+        </Grid>
+      </Grid>
+            <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              アラート表示
+          </Typography>
+        </Grid>
+        <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
+          <ChurnDashboardWrapper/>
         </Grid>
       </Grid>
     </Box>

@@ -14,8 +14,9 @@ export default function  CategoryFilterWrapper () {
           動的フィルター
         </Typography>
         <Typography variant="body1" gutterBottom>
-          カテゴリデータに対してフィルタリングする<br/>
-          抽出前との差分を赤い領域で表示
+          カテゴリデータを用いて折れ線グラフを動的にフィルタリングすることができます。<br/>
+          抽出前との差分が赤い領域で表示されます。<br/>
+          とある小売店の2年間の売り上げの推移のグラフを商品カテゴリで絞ってみましょう。
         </Typography>
         <Typography variant="body1" gutterBottom>
           <CategoryFilter/>
