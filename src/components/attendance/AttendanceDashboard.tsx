@@ -28,61 +28,65 @@ export default function AttendanceDashboard() {
   );
 
   return (
-    <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' }, py : 4 }}>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" gutterBottom>
-            グラフ描画 機能カタログ
-        </Typography>
-      </Box>
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" gutterBottom>
-            チャート描画機能
-        </Typography>
-      </Box>
-      <Box sx={{ mb: 4 }}>
-        <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-          <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
-            <DonutChart 
-              summary={summary.data}
-              isLoading={summary.isLoading}
-            />
-          </Grid>
+    <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' }, py : 4 , '& > *': { p: 3 }}}>
+      <Typography variant="h3" gutterBottom sx={{ fontWeight: "bold" }}>
+          グラフ描画 機能カタログ
+      </Typography>
 
-          <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
-            <LineChart
-              data={timeSeries.data}
-              isLoading={timeSeries.isLoading}
-              selectedRows={selectedRows}
-              filters={lineChartFilters}
-              onFilterChange={handleLineChartFilterChange}
-            />
-          </Grid>
-          
-          <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
-            <BarChart
-              data={barData.data}
-              isLoading={barData.isLoading}
-              selectedRows={selectedRows}
-              filters={barChartFilters}
-              onFilterChange={handleBarChartFilterChange}
-            />
-          </Grid>
-
-          <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
-            <Sample/>
-          </Grid>
-          <Grid  item size={{ xs: 12, sm: 6, lg: 12 }}>
-            <CategoryFilterWrapper/>
-          </Grid>
-        </Grid>
-      </Box>
-
-      <Box sx={{ mb: 4 }}>
-        <Typography variant="h4" gutterBottom>
-            テーブル描画機能
-        </Typography>
-      </Box>
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              チャート描画
+          </Typography>
+        </Grid>
+        <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+          <DonutChart 
+            summary={summary.data}
+            isLoading={summary.isLoading}
+          />
+        </Grid>
+
+        <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+          <LineChart
+            data={timeSeries.data}
+            isLoading={timeSeries.isLoading}
+            selectedRows={selectedRows}
+            filters={lineChartFilters}
+            onFilterChange={handleLineChartFilterChange}
+          />
+        </Grid>
+        
+        <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+          <BarChart
+            data={barData.data}
+            isLoading={barData.isLoading}
+            selectedRows={selectedRows}
+            filters={barChartFilters}
+            onFilterChange={handleBarChartFilterChange}
+          />
+        </Grid>
+
+        <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+          <Sample/>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              フィルタリング
+          </Typography>
+        </Grid>
+        <Grid item size={{ xs: 12 }}>
+          <CategoryFilterWrapper/>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              テーブル表示
+          </Typography>
+        </Grid>
         <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
           <StudentTable
             data={students.data || []}
