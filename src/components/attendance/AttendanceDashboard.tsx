@@ -10,6 +10,7 @@ import { Sample}  from './Sample';
 import StudentTable  from './StudentTable';
 import CategoryFilterWrapper  from './CategoryFilterWrapper';
 import ChurnDashboardWrapper  from './ChurnDashboardWrapper';
+import LinearGaugeWrapper  from './LinearGaugeWrapper';
 
 export default function AttendanceDashboard() {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -97,14 +98,22 @@ export default function AttendanceDashboard() {
           />
         </Grid>
       </Grid>
-            <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              アラート表示
-          </Typography>
-        </Grid>
+        <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+          <Grid item size={{ xs: 12 }}>
+            <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+                アラート表示
+            </Typography>
+          </Grid>
         <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
           <ChurnDashboardWrapper/>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              指標表示
+          </Typography>
+          <LinearGaugeWrapper/>
         </Grid>
       </Grid>
     </Box>

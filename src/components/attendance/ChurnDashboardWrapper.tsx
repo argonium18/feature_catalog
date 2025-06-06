@@ -23,7 +23,7 @@ export default function ChurnDashboardWrapper() {
         </Typography>
         <div className="p-6 space-y-8">
         <Typography variant="body1" gutterBottom>
-        顧客の解約リスクが閾値を超えていた時に、アラート状態としてビンが赤く表示されたりランキングリストがアラート表示になります。<br/>
+        特定のアラート条件を満たすとビンが赤く表示されたりランキングリストがアラート表示になります。<br/>
         解約リスク高い顧客に対してキャンペーン施策を行うなどのユースケースが考えられます。<br/>
         ツールバーを移動したりビンをクリックすることで閾値を変更できますので見た目の変化をご確認ください。<br/>
         <br/>
