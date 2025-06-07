@@ -5,7 +5,7 @@ import { useFilters } from '../../hooks/useFilters';
 import { GlobalFilters } from '@/components/attendance/GlobalFilters';
 import { DonutChart } from '@/components/attendance/DonutChart';
 import { LineChart } from '@/components/attendance/LineChart';
-import { BarChart}  from '@/components/attendance/BarChart';
+import { BarChart}  from '@/components/attendance/GroupBarChart';
 import StudentTable  from '@/components/attendance/StudentTable';
 
 export default function AttendanceDashboard() {

@@ -2,7 +2,8 @@
 
 import React, { useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
-import { rawData } from "@/components/issy/data/salesData";
+import { rawData } from "@/components/issy/data/salesDataDate";
+import { Checkbox } from '@mui/material';
 
 export default function Page() {
   const [includedCategories, setIncludedCategories] = useState<string[]>(() => Array.from(new Set(rawData.map(d => d.category))));
@@ -94,8 +95,7 @@ export default function Page() {
       <div>
         {Array.from(new Set(rawData.map(d => d.category))).map(cat => (
           <label key={cat} style={{ marginRight: "1rem" }}>
-            <input
-              type="checkbox"
+            <Checkbox
               checked={includedCategories.includes(cat)}
               onChange={(e) => {
                 setIncludedCategories(prev =>

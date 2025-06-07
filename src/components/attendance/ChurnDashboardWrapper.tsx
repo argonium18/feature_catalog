@@ -44,8 +44,8 @@ export default function ChurnDashboardWrapper() {
             className="w-full"
           />
         </div>
-        <div className="grid grid-cols-2 gap-4">
-          <CardContent>
+        <div className="grid grid-cols-3 gap-4">
+          <Card className="col-span-2">
           {/* グラフ1：ヒストグラム */}
           <Typography variant="h6" gutterBottom>
             顧客の解約リスク分布
@@ -57,8 +57,8 @@ export default function ChurnDashboardWrapper() {
               customers={churnPredict}
             />
           </Typography>
-          </CardContent>
-          <CardContent>
+          </Card>
+          <Card className="col-span-1">
           <Typography variant="body1" gutterBottom>
             {/* グラフ2：ランキング */}
             <ChurnRiskRanking
@@ -66,7 +66,7 @@ export default function ChurnDashboardWrapper() {
               customers={churnPredict}
             />
           </Typography>
-          </CardContent>
+          </Card>
         </div>
       </div>
     </CardContent>

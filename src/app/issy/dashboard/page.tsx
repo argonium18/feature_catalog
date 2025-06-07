@@ -1,8 +1,8 @@
 "use client";
 import React, { useState ,useEffect} from "react";
 import { Card, CardHeader, CardContent } from "@/components/issy/ui/card";
-import DynamicFilterChartManager  from "@/components/issy/cascade";
-import RechartsGroupedBar  from "@/components/issy/bar-chart";
+import DynamicFilterChartManager  from "@/components/issy/CascadeFilter";
+import RechartsGroupedBar  from "@/components/issy/BarChart";
 import Wavetable  from "@/components/issy/wavetable";
 import * as echarts from "echarts";
 import "@/app/globals.css"
@@ -21,24 +21,16 @@ export default function DashboardPage() {
           <h2>選択された日付: {highlightDate ?? "なし"}</h2>
           <DynamicFilterChartManager
           highlightDate={highlightDate}
-          onDateClick={(date) => setHighlightDate(date)}
+          onDateClick={(date: string | null) => setHighlightDate(date)}
           />
         </CardContent>
       </Card>
 
       {/* KPIカード */}
-      <Card className="col-span-1">
+      <Card className="col-span-2">
         <CardHeader>棒グラフ（カテゴリ）</CardHeader>
         <CardContent>
           <RechartsGroupedBar targetMonth={highlightDate ? highlightDate.slice(0, 7) : null}/>
-        </CardContent>
-      </Card>
-
-      {/* データメタカード       */}
-<Card className="col-span-1">
-        <CardHeader>多次元分分析（RFM）</CardHeader>
-        <CardContent>
-          <Wavetable/>
         </CardContent>
       </Card>
     </div>

@@ -5,12 +5,13 @@ import { useFilters } from '../../hooks/useFilters';
 import { GlobalFilters } from './GlobalFilters';
 import { DonutChart } from './DonutChart';
 import { LineChart } from './LineChart';
-import { BarChart}  from './BarChart';
+import { BarChart}  from './GroupBarChart';
 import { Sample}  from './Sample';
 import StudentTable  from './StudentTable';
 import CategoryFilterWrapper  from './CategoryFilterWrapper';
 import ChurnDashboardWrapper  from './ChurnDashboardWrapper';
 import LinearGaugeWrapper  from './LinearGaugeWrapper';
+import FocusSortDash  from './FocusSortDash';
 
 export default function AttendanceDashboard() {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -82,7 +83,16 @@ export default function AttendanceDashboard() {
           <CategoryFilterWrapper/>
         </Grid>
       </Grid>
-
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              ソート
+          </Typography>
+        </Grid>
+        <Grid item size={{ xs: 12 }}>
+          <FocusSortDash/>
+        </Grid>
+      </Grid>
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid item size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
