@@ -2,6 +2,10 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import ReactECharts from "echarts-for-react";
+import {   FormControl,
+  InputLabel,
+  Select,
+  MenuItem,Checkbox } from '@mui/material';
 
 type DynamicFilterChartProps = {
   inputData: { [key: string]: any }[];
@@ -10,7 +14,7 @@ type DynamicFilterChartProps = {
   yKey: string;
   onFiltered?: (filteredData: { [key: string]: any }[]) => void;
   highlightDate: string | null;
-  onDateClick?: (date: string) => void;
+  onDateClick: (date: string | null) => void;
 };
 
 const DynamicFilterChart = React.memo(function DynamicFilterChart({
@@ -98,7 +102,7 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
       : [];
 
     return {
-      tooltip: { trigger: "axis" },
+      tooltip: { trigger: "none" },
       legend: { data: ["元データ合計", "フィルター後合計"] },
       xAxis: { type: "category", data: dates },
       yAxis: { type: "value" },
@@ -136,9 +140,30 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
           name: "クリックゾーン",
           type: "scatter",
           data: dates.map((date) => [date, 0]),
-          symbolSize: 30,
+          symbolSize: [20, 300],
           itemStyle: { color: "transparent" },
-          emphasis: { itemStyle: { color: "rgba(0,0,0,0.05)" } },
+          emphasis: {
+            itemStyle: { color: "rgba(255, 0, 0, 0.1)" },
+            label: {
+              show: true,
+              formatter: (params: any) => {
+                const dateStr = params.name || (Array.isArray(params.value) && params.value[0]);
+                if (typeof dateStr === "string") {
+                  const [yyyy, mm] = dateStr.split("-");
+                  return `${yyyy}-${mm}`;
+                }
+                return "";
+              },
+              position: "top",
+              fontSize: 12,
+              color: "black",
+              backgroundColor: "white",
+              borderColor: "#ccc",
+              borderWidth: 1,
+              borderRadius: 4,
+              padding: [2, 6],
+            }
+          },
           tooltip: { show: false },
           z: 98,
         },
@@ -157,15 +182,23 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
   return (
     <div style={{ padding: "1rem", border: "1px solid #ccc", borderRadius: "8px", marginBottom: "2rem" }}>
       <div style={{ marginBottom: "1rem" }}>
-        <label>
-          フィルター対象:
-          <select value={filterKey} onChange={(e) => { setFilterKey(e.target.value); setExcludedValues([]); }}>
-            <option value="">選択してください</option>
-            {availableKeys.map((key) => (
-              <option key={key} value={key}>{key}</option>
-            ))}
-          </select>
-        </label>
+<FormControl fullWidth style={{ marginBottom: "1rem" }}>
+  <InputLabel id="filter-select-label">フィルター対象</InputLabel>
+  <Select
+    labelId="filter-select-label"
+    value={filterKey}
+    label="フィルター対象"
+    onChange={(e) => {
+      setFilterKey(e.target.value);
+      setExcludedValues([]);
+    }}
+  >
+    <MenuItem value="">未選択</MenuItem>
+    {availableKeys.map((key) => (
+      <MenuItem key={key} value={key}>{key}</MenuItem>
+    ))}
+  </Select>
+</FormControl>
       </div>
 
       {filterKey && (
@@ -173,8 +206,7 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
           <p>除外する{filterKey}:</p>
           {availableValues.map((val) => (
             <label key={val} style={{ marginRight: "1rem" }}>
-              <input
-                type="checkbox"
+              <Checkbox
                 checked={excludedValues.includes(val)}
                 onChange={(e) => {
                   setExcludedValues((prev) =>
