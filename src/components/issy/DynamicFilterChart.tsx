@@ -5,7 +5,7 @@ import ReactECharts from "echarts-for-react";
 import {   FormControl,
   InputLabel,
   Select,
-  MenuItem,Checkbox } from '@mui/material';
+  MenuItem,Checkbox,Typography } from '@mui/material';
 
 type DynamicFilterChartProps = {
   inputData: { [key: string]: any }[];
@@ -182,28 +182,28 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
   return (
     <div style={{ padding: "1rem", border: "1px solid #ccc", borderRadius: "8px", marginBottom: "2rem" }}>
       <div style={{ marginBottom: "1rem" }}>
-<FormControl fullWidth style={{ marginBottom: "1rem" }}>
-  <InputLabel id="filter-select-label">フィルター対象</InputLabel>
-  <Select
-    labelId="filter-select-label"
-    value={filterKey}
-    label="フィルター対象"
-    onChange={(e) => {
-      setFilterKey(e.target.value);
-      setExcludedValues([]);
-    }}
-  >
-    <MenuItem value="">未選択</MenuItem>
-    {availableKeys.map((key) => (
-      <MenuItem key={key} value={key}>{key}</MenuItem>
-    ))}
-  </Select>
-</FormControl>
+        <FormControl fullWidth style={{ marginBottom: "1rem" }}>
+          <InputLabel id="filter-select-label">フィルター対象</InputLabel>
+          <Select
+            labelId="filter-select-label"
+            value={filterKey}
+            label="フィルター対象"
+            onChange={(e) => {
+              setFilterKey(e.target.value);
+              setExcludedValues([]);
+            }}
+          >
+            <MenuItem value="">未選択</MenuItem>
+            {availableKeys.map((key) => (
+              <MenuItem key={key} value={key}>{key}</MenuItem>
+            ))}
+          </Select>
+        </FormControl>
       </div>
 
       {filterKey && (
         <div style={{ marginBottom: "1rem" }}>
-          <p>除外する{filterKey}:</p>
+          <Typography>除外する{filterKey}:</Typography>
           {availableValues.map((val) => (
             <label key={val} style={{ marginRight: "1rem" }}>
               <Checkbox

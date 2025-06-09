@@ -18,7 +18,7 @@ export default function  CategoryFilterWrapper () {
           抽出前との差分が赤い領域で表示されます。<br/>
           とある小売店の2年間の売り上げの推移のグラフを商品カテゴリで絞ってみましょう。
         </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="body1" gutterBottom component="div">
           <CategoryFilter/>
         </Typography>
       </CardContent>
