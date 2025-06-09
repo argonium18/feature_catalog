@@ -10,6 +10,7 @@ import { Sample}  from './Sample';
 import { DragAndDrop } from  './DragAndDrop';
 import StudentTable  from './StudentTable';
 import CategoryFilterWrapper  from './CategoryFilterWrapper';
+import TimeSeriesFilterWrapper  from './TimeSeriesFilterWrapper';
 import ChurnDashboardWrapper  from './ChurnDashboardWrapper';
 import LinearGaugeWrapper  from './LinearGaugeWrapper';
 import FocusSortDash  from './FocusSortDash';
@@ -82,6 +83,9 @@ export default function AttendanceDashboard() {
         </Grid>
         <Grid item size={{ xs: 12 }}>
           <CategoryFilterWrapper/>
+        </Grid>
+        <Grid item size={{ xs: 12 }}>
+          <TimeSeriesFilterWrapper/>
         </Grid>
       </Grid>
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
