@@ -29,7 +29,7 @@ export const DonutChart: React.FC<DonutChartProps> = ({ summary }) => {
         
         {/* 目標差異を色つきChipで表示 */}
         <Box mt={2} display="flex" alignItems="center">
-          <Typography variant="body2" sx={{ mr: 1 }}>
+          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             目標との差異：
           </Typography>
           <Chip

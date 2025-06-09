@@ -23,7 +23,7 @@ export default function DashboardPage() {
             <Typography variant="h6" gutterBottom>
               2種類のソートグラフの連動
             </Typography>
-            <Typography variant="body1" gutterBottom>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 とある小売業の売り上げデータを日付でソートしたグラフと売り上げでソートしたグラフを表示しています。<br/><br/>
             </Typography>
             <Typography variant="body1" gutterBottom>
@@ -32,7 +32,7 @@ export default function DashboardPage() {
                         <Typography variant="h6" gutterBottom>
                             段階フィルター
                         </Typography>
-                        <Typography variant="body1" gutterBottom>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                             時系列順にソートされたデータを折れ線グラフとして表示しています。<br/>
                             「フィルター対象」を選択することで、特定のカテゴリによる絞り込みが可能です。<br/>
                             また、「フィルターを追加」ボタンを押すことで、さらにドリルダウンして複数段階のフィルターを適用できます。<br/>
@@ -42,7 +42,7 @@ export default function DashboardPage() {
                         <Typography variant="h6" gutterBottom>
                             グループ化棒グラフ
                         </Typography>
-                        <Typography variant="body1" gutterBottom>
+                        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                             棒グラフでは、量的データ（売上など）に基づいて各対象（例：支店）のパフォーマンスをランキング形式で比較できます。<br/>
                             「モード切替」ボタンを押すことで、カテゴリ（例：地域）ごとにグループ化された表示に切り替えることができ、各グループ内での順位や傾向も把握できます。<br/>
                             折れ線グラフ上の日付（X軸）をクリックすることで、その月の売上データが自動的に抽出され、棒グラフに反映されます。<br/>

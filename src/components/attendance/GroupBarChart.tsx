@@ -38,7 +38,7 @@ export const BarChart: React.FC<BarChartProps> = ({
         <Typography variant="h6" gutterBottom>
             棒グラフ
         </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             グループごとのデータを表示
         </Typography>
         {isLoading ? (

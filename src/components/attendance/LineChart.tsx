@@ -21,7 +21,6 @@ interface LineChartProps {
 export const LineChart: React.FC<LineChartProps> = ({ 
   data, 
   isLoading,
-  selectedRows,
   filters,
   onFilterChange
 }) => {
@@ -38,7 +37,7 @@ export const LineChart: React.FC<LineChartProps> = ({
         <Typography variant="h6" gutterBottom>
             折れ線グラフ
         </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
             時系列データを表示
         </Typography>
         {isLoading ? (

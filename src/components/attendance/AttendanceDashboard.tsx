@@ -7,6 +7,7 @@ import { DonutChart } from './DonutChart';
 import { LineChart } from './LineChart';
 import { BarChart}  from './GroupBarChart';
 import { Sample}  from './Sample';
+import { DragAndDrop } from  './DragAndDrop';
 import StudentTable  from './StudentTable';
 import CategoryFilterWrapper  from './CategoryFilterWrapper';
 import ChurnDashboardWrapper  from './ChurnDashboardWrapper';
@@ -124,6 +125,14 @@ export default function AttendanceDashboard() {
               指標表示
           </Typography>
           <LinearGaugeWrapper/>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              ドラッグ&ドロップ
+          </Typography>
+          <DragAndDrop/>
         </Grid>
       </Grid>
     </Box>
