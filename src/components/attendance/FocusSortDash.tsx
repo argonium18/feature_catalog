@@ -26,7 +26,7 @@ export default function DashboardPage() {
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 とある小売業の売り上げデータを日付でソートしたグラフと売り上げでソートしたグラフを表示しています。<br/><br/>
             </Typography>
-            <Typography variant="body1" gutterBottom>
+            <Typography variant="body1" gutterBottom component="div">
                 <div className="grid grid-cols-3 gap-4">
                     <Card>
                         <Typography variant="h6" gutterBottom>

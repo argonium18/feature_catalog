@@ -123,7 +123,7 @@ export default function Home() {
           棒状のゲージが長さや色で値の大小や状態を表現し、瞬時に状況把握を助けます。<br/>
           色やアニメーションを付けることで感情的なインパクトも演出できます。
         </Typography>
-        <Typography variant="body1" gutterBottom>
+        <Typography variant="body1" gutterBottom component="div">
           <div style={{ padding: 20, maxWidth: 500 }}>
             <h1>今期の売上進捗</h1>
             <LinearGauge value={value} max={max} target={target} height={30} />

@@ -50,7 +50,7 @@ export default function ChurnDashboardWrapper() {
           <Typography variant="h6" gutterBottom>
             顧客の解約リスク分布
           </Typography>
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body1" gutterBottom component="div">
             <ChurnRiskHistogram
               alertThreshold={alertThreshold}
               onBarClick={(risk) => setAlertThreshold(risk)}
@@ -59,7 +59,7 @@ export default function ChurnDashboardWrapper() {
           </Typography>
           </Card>
           <Card className="col-span-1">
-          <Typography variant="body1" gutterBottom>
+          <Typography variant="body1" gutterBottom component="div">
             {/* グラフ2：ランキング */}
             <ChurnRiskRanking
               alertThreshold={alertThreshold}
