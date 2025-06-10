@@ -55,9 +55,6 @@ export default function AttendanceDashboard() {
           <LineChart
             data={timeSeries.data}
             isLoading={timeSeries.isLoading}
-            selectedRows={selectedRows}
-            filters={lineChartFilters}
-            onFilterChange={handleLineChartFilterChange}
           />
         </Grid>
         
@@ -75,6 +72,7 @@ export default function AttendanceDashboard() {
           <Sample/>
         </Grid>
       </Grid>
+
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid item size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
