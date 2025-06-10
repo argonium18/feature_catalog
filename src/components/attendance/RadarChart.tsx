@@ -1,11 +1,10 @@
-// MathRadarChart.tsx
 import React from 'react';
 import ReactECharts from 'echarts-for-react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 // import { useEchartsTheme } from '../.././dashboard/theme/customizations/echarts';
 
-const MathRadarChart = () => {
+export const MathRadarChart = () => {
 
   // const themeName = useEchartsTheme('custom-mui');  // 'custom-mui-light' or 'custom-mui-dark'
 
@@ -52,5 +51,3 @@ const MathRadarChart = () => {
     </Card>
     );
 };
-
-export default MathRadarChart;

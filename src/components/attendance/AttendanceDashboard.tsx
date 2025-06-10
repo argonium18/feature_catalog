@@ -5,8 +5,8 @@ import { useFilters } from '../../hooks/useFilters';
 import { GlobalFilters } from './GlobalFilters';
 import { DonutChart } from './DonutChart';
 import { LineChart } from './LineChart';
-import { BarChart}  from './GroupBarChart';
-import { Sample}  from './Sample';
+import { BarChart }  from './GroupBarChart';
+import { RadarChart }  from './RadarChart';
 import { DragAndDrop } from  './DragAndDrop';
 import StudentTable  from './StudentTable';
 import CategoryFilterWrapper  from './CategoryFilterWrapper';
@@ -47,15 +47,11 @@ export default function AttendanceDashboard() {
           </Typography>
         </Grid>
         <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
-          <DonutChart 
-            summary={summary.data}
-            isLoading={summary.isLoading}
-          />
+          <DonutChart/>
         </Grid>
         <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
           <LineChart/>
         </Grid>
-        
         <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
           <BarChart
             data={barData.data}
@@ -65,9 +61,42 @@ export default function AttendanceDashboard() {
             onFilterChange={handleBarChartFilterChange}
           />
         </Grid>
-
         <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
-          <Sample/>
+          <RadarChart/>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 , py: 2}}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{fontWeight: "bold" }}>
+              テーブル表示
+          </Typography>
+        </Grid>
+        <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
+          <StudentTable
+            data={students.data || []}
+            isLoading={students.isLoading}
+            selectedRows={selectedRows}
+            onSelectionChange={setSelectedRows}
+          />
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              指標表示
+          </Typography>
+          <LinearGaugeWrapper/>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              ドラッグ&ドロップ
+          </Typography>
+          <DragAndDrop/>
         </Grid>
       </Grid>
 
@@ -96,21 +125,6 @@ export default function AttendanceDashboard() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              テーブル表示
-          </Typography>
-        </Grid>
-        <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
-          <StudentTable
-            data={students.data || []}
-            isLoading={students.isLoading}
-            selectedRows={selectedRows}
-            onSelectionChange={setSelectedRows}
-          />
-        </Grid>
-      </Grid>
         <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
           <Grid item size={{ xs: 12 }}>
             <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
@@ -119,23 +133,6 @@ export default function AttendanceDashboard() {
           </Grid>
         <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
           <ChurnDashboardWrapper/>
-        </Grid>
-      </Grid>
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              指標表示
-          </Typography>
-          <LinearGaugeWrapper/>
-        </Grid>
-      </Grid>
-      
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              ドラッグ&ドロップ
-          </Typography>
-          <DragAndDrop/>
         </Grid>
       </Grid>
     </Box>

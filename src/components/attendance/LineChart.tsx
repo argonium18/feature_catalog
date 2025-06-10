@@ -27,15 +27,15 @@ export const LineChart: React.FC = () => {
   };
 
   return (
-    <Card variant="outlined" sx={{ flexGrow: 1}}>
-      <CardContent sx={{'& > *': { mb: 2}}}>
+    <Card variant="outlined" sx={{ height: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+      <CardContent sx={{ '& > *': { mb: 2 }, flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
         <Typography variant="h6" gutterBottom>
           折れ線グラフ
         </Typography>
         <Typography variant="body2" color="text.secondary" >
           時間経過や連続するデータの変化を視覚的に示し、トレンドやパターンを把握しやすくする役割を持つ
         </Typography>
-        <ReactECharts option={option} style={{ height: 300 }} />
+        <ReactECharts option={option} style={{ height: '100%', width: '100%' }} />
       </CardContent>
     </Card>
   );

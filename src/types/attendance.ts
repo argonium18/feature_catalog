@@ -9,10 +9,8 @@ export interface Filters {
 
 // サマリーデータの型
 export interface SummaryData {
-  todayRate: number;
-  prevDayRate: number;
-  prevWeekRate: number;
-  target: number;
+  name: string;
+  value: number;
 }
 
 // 時系列データの型

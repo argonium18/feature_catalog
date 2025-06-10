@@ -34,18 +34,8 @@ export function DragAndDrop() {
 
   // チャートコンポーネントマップ
   const chartMap = {
-    donut: (
-      <DonutChart 
-        summary={summary.data}
-        isLoading={summary.isLoading}
-      />
-    ),
-    line: (
-      <LineChart
-        data={timeSeries.data}
-        isLoading={timeSeries.isLoading}
-      />
-    ),
+    donut: (<DonutChart/>),
+    line: (<LineChart/>),
     bar: (
       <BarChart
         data={barData.data}

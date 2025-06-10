@@ -7,44 +7,54 @@ import {
   Chip,
 } from '@mui/material';
 import ReactECharts from 'echarts-for-react';
-import type { SummaryData } from '../../types/attendance';
-import { getDonutOption } from '../../utils/chartOptions';
-import { CHART_CONFIG } from '../../constants/attendance';
+import { useQuery } from '@tanstack/react-query';
+import { fetchSummary } from '../../services/attendanceApi';
 
-interface DonutChartProps {
-  summary: SummaryData | null;
-}
+export const DonutChart: React.FC = () => {
+  // 円グラフデータ取得（正しいAPI関数を使用）
+  const { data = [] } = useQuery({
+    queryKey: ['summary'], // クエリキーも変更
+    queryFn: fetchSummary,
+  });
 
-export const DonutChart: React.FC<DonutChartProps> = ({ summary }) => {
-  // 目標差異を計算
-  const diff = summary ? summary.todayRate - summary.target : 0;
-  const diffLabel = summary ? `${diff > 0 ? '+' : ''}${diff}%` : '';
-
+  // 円グラフオプション
+  const option = {
+    title: { 
+      text: '地方別人口割合', 
+      left: 'center'
+    },
+    tooltip: { 
+      trigger: 'item'
+    },
+    legend: {
+      orient: 'vertical',
+      left: 'left'
+    },
+    series: [{
+      name: '人口割合',
+      type: 'pie',
+      radius: ['40%', '70%'],
+      data: data
+    }]
+  };
+  
   return (
     <Card variant="outlined" sx={{ height: '100%', flexGrow: 1 }}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          今日の出席率
+          地方別人口分布
         </Typography>
-        
-        {/* 目標差異を色つきChipで表示 */}
-        <Box mt={2} display="flex" alignItems="center">
+        <Box mt={2} display="flex" alignItems="center" gap={1}>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            目標との差異：
+            総人口：
           </Typography>
           <Chip
-            label={diffLabel}
+            label="100%"
             size="small"
-            color={diff >= 0 ? 'success' : 'error'}
+            color="primary"
           />
         </Box>
-        
-        {summary && (
-          <ReactECharts 
-            option={getDonutOption(summary.todayRate)} 
-            style={{ height: CHART_CONFIG.HEIGHT }} 
-          />
-        )}
+        <ReactECharts option={option} style={{ height: '400px' }} />
       </CardContent>
     </Card>
   );

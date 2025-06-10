@@ -9,14 +9,17 @@ import type {
 import { SUBJECT_NAMES } from '../constants/attendance';
 
 // サマリーデータの取得
-export const fetchSummary = async (filters: Filters): Promise<SummaryData> => {
-  // TODO: 実際のAPI呼び出しに置き換える
-  return { 
-    todayRate: 92, 
-    prevDayRate: 95, 
-    prevWeekRate: 90, 
-    target: 95 
-  };
+export const fetchSummary = async (): Promise<SummaryData[]> => {
+  return [
+      { name: '関東', value: 34.8 },
+      { name: '近畿', value: 16.6 },
+      { name: '中部', value: 15.1 },
+      { name: '九州・沖縄', value: 11.1 },
+      { name: '東北', value: 7.1 },
+      { name: '中国', value: 5.9 },
+      { name: '北海道', value: 4.2 },
+      { name: '四国', value: 2.4 },
+  ]; 
 };
 
 //折れ線グラフデータの取得
