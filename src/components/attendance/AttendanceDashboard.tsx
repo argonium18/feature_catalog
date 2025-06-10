@@ -52,7 +52,6 @@ export default function AttendanceDashboard() {
             isLoading={summary.isLoading}
           />
         </Grid>
-
         <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
           <LineChart/>
         </Grid>
