@@ -19,36 +19,17 @@ export const fetchSummary = async (filters: Filters): Promise<SummaryData> => {
   };
 };
 
-// 時系列データの取得
-export const fetchTimeSeries = async (
-  filters: Filters, 
-  selectedIds: number[]
-): Promise<TimeSeriesData[] | StudentTimeSeriesData[]> => {
-  // 基本の時系列データ
-  const baseData: TimeSeriesData[] = [
-    { date: '2025-05-10', rate: 90, cumulative: 5 },
-    { date: '2025-05-11', rate: 92, cumulative: 7 },
-    { date: '2025-05-12', rate: 94, cumulative: 8 },
-    { date: '2025-05-13', rate: 91, cumulative: 10 },
-    { date: '2025-05-14', rate: 93, cumulative: 12 },
+//折れ線グラフデータの取得
+export const fetchTimeSeries = async (): Promise<TimeSeriesData[]> => {
+  return [
+    { date: '05-10', rate: 90, price: 2000 },
+    { date: '05-11', rate: 92, price: 2500 },
+    { date: '05-12', rate: 94, price: 2200 },
+    { date: '05-13', rate: 91, price: 2500 },
+    { date: '05-14', rate: 93, price: 2800 },
   ];
-
-  // 生徒が選択されている場合は、選択された生徒のデータを返す
-  if (selectedIds?.length > 0) {
-    return selectedIds.map((id) => ({
-      studentId: id,
-      name: `生徒${id}`,
-      data: baseData.map((day, index) => ({
-        date: day.date,
-        rate: Math.max(85, Math.min(98, 90 + id % 5 + index % 3)),
-        cumulative: index + id % 3
-      }))
-    }));
-  }
-  
-  // 生徒が選択されていない場合は、全体の平均データを返す
-  return baseData;
 };
+
 
 // テーブルデータの取得
 export const fetchTableData = async (filters: Filters): Promise<StudentData[]> => {

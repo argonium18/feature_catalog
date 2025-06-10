@@ -1,12 +1,6 @@
-import { useState, useEffect, useCallback } from 'react';
-import type {
-  Filters,
-  SummaryData,
-  TimeSeriesData,
-  StudentTimeSeriesData,
-  StudentData,
-  BarData
-} from '../types/attendance';
+
+import { useQuery } from '@tanstack/react-query';
+import type { Filters } from '../types/attendance';
 import {
   fetchSummary,
   fetchTimeSeries,
@@ -14,126 +8,63 @@ import {
   fetchBarData
 } from '../services/attendanceApi';
 
-export const useAttendanceData = (filters: Filters, selectedRows: number[]) => {
-  const [summary, setSummary] = useState<SummaryData | null>(null);
-  const [timeSeries, setTimeSeries] = useState<TimeSeriesData[] | StudentTimeSeriesData[]>([]);
-  const [tableData, setTableData] = useState<StudentData[]>([]);
-  const [barData, setBarData] = useState<BarData | null>(null);
-  
-  // 各データソースごとに個別のローディング状態を管理
-  const [loadingStates, setLoadingStates] = useState({
-    summary: false,
-    timeSeries: false,
-    tableData: false,
-    barData: false,
-    initial: true
+export const useAttendanceData = (
+  globalFilters: Filters, 
+  selectedRows: number[],
+  lineChartFilters?: Filters,
+  barChartFilters?: Filters,
+) => {
+  // サマリーデータ
+  const summaryQuery = useQuery({
+    queryKey: ['attendance-summary', globalFilters],
+    queryFn: () => fetchSummary(globalFilters),
   });
 
-  // ローディング状態を更新するヘルパー関数
-  const updateLoadingState = useCallback((key: keyof typeof loadingStates, value: boolean) => {
-    setLoadingStates(prev => ({
-      ...prev,
-      [key]: value,
-      initial: false
-    }));
-  }, []);
+  // テーブルデータ
+  const studentsQuery = useQuery({
+    queryKey: ['attendance-students', globalFilters],
+    queryFn: () => fetchTableData(globalFilters),
+  });
 
-  // 全体のローディング状態（いずれかが読み込み中の場合true）
-  const isLoading = Object.values(loadingStates).some(Boolean);
+  // 時系列データ（ローカルフィルター対応）
+  const timeSeriesFilters = lineChartFilters || globalFilters;
+  const timeSeriesQuery = useQuery({
+    queryKey: ['attendance-timeseries', timeSeriesFilters, selectedRows],
+    queryFn: () => fetchTimeSeries(timeSeriesFilters, selectedRows),
+  });
 
-  // 初期データとフィルター変更時のデータ取得
-  useEffect(() => {
-    const loadInitialData = async () => {
-      console.log('フィルター変更によるデータ読み込み開始');
-      
-      // 各データソースのローディング状態を設定
-      updateLoadingState('summary', true);
-      updateLoadingState('tableData', true);
-      updateLoadingState('timeSeries', true);
-      updateLoadingState('barData', true);
-
-      try {
-        // サマリーとテーブルデータを並行取得
-        const [summaryData, tableDataResult] = await Promise.all([
-          fetchSummary(filters).finally(() => updateLoadingState('summary', false)),
-          fetchTableData(filters).finally(() => updateLoadingState('tableData', false))
-        ]);
-
-        setSummary(summaryData);
-        setTableData(tableDataResult);
-
-        // 初期表示は選択なしの状態でグラフデータを取得
-        const [timeSeriesData, barDataResult] = await Promise.all([
-          fetchTimeSeries(filters, []).finally(() => updateLoadingState('timeSeries', false)),
-          fetchBarData(filters, []).finally(() => updateLoadingState('barData', false))
-        ]);
-        
-        setTimeSeries(timeSeriesData);
-        setBarData(barDataResult);
-
-      } catch (error) {
-        console.error('データの取得に失敗しました:', error);
-        // エラー時もローディング状態をリセット
-        setLoadingStates({
-          summary: false,
-          timeSeries: false,
-          tableData: false,
-          barData: false,
-          initial: false
-        });
-      }
-    };
-
-    loadInitialData();
-  }, [filters, updateLoadingState]);
-
-  // 選択行変更時のグラフデータ更新
-  useEffect(() => {
-    // 初期ロード中は実行しない
-    if (loadingStates.initial) return;
-
-    const updateChartsWithSelection = async () => {
-      console.log("選択された生徒ID:", selectedRows);
-      
-      updateLoadingState('timeSeries', true);
-      updateLoadingState('barData', true);
-
-      try {
-        const [timeSeriesData, barDataResult] = await Promise.all([
-          fetchTimeSeries(filters, selectedRows).finally(() => updateLoadingState('timeSeries', false)),
-          fetchBarData(filters, selectedRows).finally(() => updateLoadingState('barData', false))
-        ]);
-
-        setTimeSeries(timeSeriesData);
-        setBarData(barDataResult);
-      } catch (error) {
-        console.error('グラフデータの更新に失敗しました:', error);
-        updateLoadingState('timeSeries', false);
-        updateLoadingState('barData', false);
-      }
-    };
-
-    updateChartsWithSelection();
-  }, [selectedRows, filters, loadingStates.initial, updateLoadingState]);
+  // 棒グラフデータ（選択行に依存）
+  // barFiltersの名前は変更
+  const barFilters = barChartFilters || globalFilters;
+  const barDataQuery = useQuery({
+    queryKey: ['attendance-bar', barFilters, selectedRows],
+    queryFn: () => fetchBarData(barFilters, selectedRows),
+  });
 
   return {
     summary: {
-      data: summary,
-      isLoading: loadingStates.summary
+      data: summaryQuery.data ?? null,
+      isLoading: summaryQuery.isLoading,
+      error: summaryQuery.error,
+      refetch: summaryQuery.refetch
     },
     students: {
-      data: tableData,
-      isLoading: loadingStates.tableData
+      data: studentsQuery.data ?? [],
+      isLoading: studentsQuery.isLoading,
+      error: studentsQuery.error,
+      refetch: studentsQuery.refetch
     },
     timeSeries: {
-      data: timeSeries,
-      isLoading: loadingStates.timeSeries
+      data: timeSeriesQuery.data ?? [],
+      isLoading: timeSeriesQuery.isLoading,
+      error: timeSeriesQuery.error,
+      refetch: timeSeriesQuery.refetch
     },
     barData: {
-      data: barData,
-      isLoading: loadingStates.barData
+      data: barDataQuery.data ?? null,
+      isLoading: barDataQuery.isLoading,
+      error: barDataQuery.error,
+      refetch: barDataQuery.refetch
     },
-    // 全体のローディング状態も提供
-    isLoading
   };
 };

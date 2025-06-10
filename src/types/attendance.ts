@@ -19,7 +19,7 @@ export interface SummaryData {
 export interface TimeSeriesData {
   date: string;
   rate: number;
-  cumulative: number;
+  price: number;
 }
 
 // 生徒別時系列データの型

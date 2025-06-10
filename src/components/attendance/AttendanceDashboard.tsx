@@ -29,7 +29,9 @@ export default function AttendanceDashboard() {
 
   const { summary, students, timeSeries, barData } = useAttendanceData(
     globalFilters, 
-    selectedRows
+    selectedRows,
+    lineChartFilters,
+    barChartFilters
   );
 
   return (
@@ -52,10 +54,7 @@ export default function AttendanceDashboard() {
         </Grid>
 
         <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
-          <LineChart
-            data={timeSeries.data}
-            isLoading={timeSeries.isLoading}
-          />
+          <LineChart/>
         </Grid>
         
         <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
@@ -86,6 +85,7 @@ export default function AttendanceDashboard() {
           <TimeSeriesFilterWrapper/>
         </Grid>
       </Grid>
+
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid item size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
@@ -96,6 +96,7 @@ export default function AttendanceDashboard() {
           <FocusSortDash/>
         </Grid>
       </Grid>
+
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid item size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
@@ -129,6 +130,7 @@ export default function AttendanceDashboard() {
           <LinearGaugeWrapper/>
         </Grid>
       </Grid>
+      
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid item size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>

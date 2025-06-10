@@ -49,7 +49,7 @@ export const getLineChartOption = (
   data: TimeSeriesData[] | StudentTimeSeriesData[]
 ) => {
   // 生徒が選択されている場合（複数生徒の比較グラフ）
-  if (data?.length > 0 && 'studentId' in data[0]) {
+  if (data?.length > 0 ) {
     const studentData = data as StudentTimeSeriesData[];
     return {
       tooltip: { trigger: 'axis' },
@@ -84,51 +84,6 @@ export const getLineChartOption = (
       })),
     };
   }
-  
-  // 生徒が選択されていない場合（全体の出席率と累積欠席日数）
-  const timeSeriesData = data as TimeSeriesData[];
-  return {
-    tooltip: { trigger: 'axis' },
-    legend: { data: ['出席率', '累積欠席日数'] },
-    grid: {
-      bottom: 30
-    },
-    xAxis: { 
-      type: 'category', 
-      data: timeSeriesData.map((d) => d.date),
-      axisLabel: {
-        formatter: (value: string) => value.substring(5) // MMM-DD形式に短縮
-      }
-    },
-    yAxis: [
-      { 
-        type: 'value',
-        name: '出席率',
-        min: CHART_CONFIG.MIN_RATE,
-        max: CHART_CONFIG.MAX_RATE
-      },
-      {
-        type: 'value',
-        name: '累積欠席日数',
-        nameLocation: 'end',
-        position: 'right'
-      }
-    ],
-    series: [
-      { 
-        name: '出席率', 
-        type: 'line', 
-        data: timeSeriesData.map((d) => d.rate),
-        yAxisIndex: 0
-      },
-      { 
-        name: '累積欠席日数', 
-        type: 'line', 
-        data: timeSeriesData.map((d) => d.cumulative),
-        yAxisIndex: 1
-      },
-    ],
-  };
 };
 
 // 棒グラフのオプション生成

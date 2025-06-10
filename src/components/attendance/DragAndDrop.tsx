@@ -44,9 +44,6 @@ export function DragAndDrop() {
       <LineChart
         data={timeSeries.data}
         isLoading={timeSeries.isLoading}
-        filters={lineChartFilters}
-        selectedRows={[1]}
-        onFilterChange={handleLineChartFilterChange}
       />
     ),
     bar: (
