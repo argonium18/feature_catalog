@@ -32,17 +32,59 @@ export default function Page() {
     });
   }, [categoryFilteredData, dates]);
 
+  // グラフ2：地域フィルター後のデータ
+  const regionFilteredData = useMemo(() => {
+    return categoryFilteredData.filter(d => includedRegions.includes(d.region));
+  }, [categoryFilteredData, includedRegions]);
+
+  // グラフ2：時系列売上（フィルター後）
+  const filteredSeries2 = useMemo(() => {
+    return dates.map(date => {
+      const sum = regionFilteredData.filter(d => d.date === date).reduce((a, b) => a + b.sales, 0);
+      return { date, sales: sum };
+    });
+  }, [regionFilteredData, dates]);
 
   const makeOption = (original: { date: string; sales: number }[], filtered: { date: string; sales: number }[]) => {
+    const diffBase = original.map((d, i) => Math.min(original[i].sales, filtered[i].sales));
+    const diffDelta = original.map((d, i) => Math.abs(original[i].sales - filtered[i].sales));
+
     return {
       tooltip: { trigger: "axis" },
+      legend: { data: ["元データ", "フィルター後"] },
       xAxis: { type: "category", data: dates },
       yAxis: { type: "value" },
       series: [
         {
+          name: "元データ",
+          type: "line",
+          data: original.map(d => d.sales),
+          lineStyle: { type: "dotted" },
+          smooth: false,
+        },
+        {
+          name: "フィルター後",
           type: "line",
           data: filtered.map(d => d.sales),
           smooth: false,
+        },
+        {
+          name: "差分ベース",
+          type: "line",
+          data: diffBase,
+          stack: "diff",
+          lineStyle: { opacity: 0 },
+          areaStyle: { opacity: 0 },
+        },
+        {
+          name: "差分領域",
+          type: "line",
+          data: diffDelta,
+          stack: "diff",
+          lineStyle: { opacity: 0 },
+          areaStyle: {
+            color: "rgba(255, 0, 0, 0.2)",
+          },
         },
       ],
     };

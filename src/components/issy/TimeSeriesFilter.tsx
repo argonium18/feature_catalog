@@ -4,33 +4,44 @@ import React, { useMemo, useState } from "react";
 import ReactECharts from "echarts-for-react";
 import { rawData } from "@/components/issy/data/salesTimeSeries";
 import {
-  Select,MenuItem } from '@mui/material';
-export default function Page() {
-  const [windowSize, setWindowSize] = useState(2);
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+} from "@mui/material";
 
+export default function Page() {
   const categories = Array.from(new Set(rawData.map((d) => d.category)));
-  const [excludedCategories, setExcludedCategories] = useState<string[]>(categories);
   const dates = Array.from(new Set(rawData.map((d) => d.date))).sort();
 
+  const [windowSize, setWindowSize] = useState(2);
+  const [excludedCategories, setExcludedCategories] = useState<string[]>([]);
+  const [startDate, setStartDate] = useState(dates[0]);
+  const [endDate, setEndDate] = useState(dates[dates.length - 1]);
+
+  const visibleDates = useMemo(() => {
+    return dates.filter((d) => d >= startDate && d <= endDate);
+  }, [dates, startDate, endDate]);
+
   const originalSeries = useMemo(() => {
-    return dates.map((date) => {
+    return visibleDates.map((date) => {
       const sum = rawData
         .filter((d) => d.date === date)
         .reduce((a, b) => a + b.sales, 0);
       return { date, sales: sum };
     });
-  }, [rawData, dates]);
+  }, [rawData, visibleDates]);
 
   const filteredSeries = useMemo(() => {
-    return dates.map((date) => {
+    return visibleDates.map((date) => {
       const sum = rawData
         .filter(
-          (d) => d.date === date && excludedCategories.includes(d.category)
+          (d) => d.date === date && !excludedCategories.includes(d.category)
         )
         .reduce((a, b) => a + b.sales, 0);
       return { date, sales: sum };
     });
-  }, [rawData, excludedCategories, dates]);
+  }, [rawData, excludedCategories, visibleDates]);
 
   const movingAverage = (data: { date: string; sales: number }[]) => {
     return data.map((_, i) => {
@@ -54,7 +65,7 @@ export default function Page() {
   const option = {
     tooltip: { trigger: "axis" },
     legend: { data: ["元データ移動平均", "フィルター後移動平均"] },
-    xAxis: { type: "category", data: dates },
+    xAxis: { type: "category", data: visibleDates },
     yAxis: { type: "value" },
     series: [
       {
@@ -93,14 +104,13 @@ export default function Page() {
 
   return (
     <div style={{ padding: "1rem" }}>
-      <h2>🛒 売上時系列グラフ</h2>
-
       <div style={{ marginBottom: "1rem" }}>
-        <label>
-          移動平均幅:
+        <FormControl style={{ marginRight: "1rem", minWidth: 120 }}>
+          <InputLabel>移動平均幅</InputLabel>
           <Select
             value={windowSize}
             onChange={(e) => setWindowSize(Number(e.target.value))}
+            label="移動平均幅"
           >
             {[1, 30, 90, 360].map((v) => (
               <MenuItem key={v} value={v}>
@@ -108,27 +118,61 @@ export default function Page() {
               </MenuItem>
             ))}
           </Select>
-        </label>
+        </FormControl>
+        <FormControl style={{ marginRight: "1rem", minWidth: 140 }}>
+          <InputLabel>開始日</InputLabel>
+          <Select
+            value={startDate}
+            onChange={(e) => setStartDate(e.target.value)}
+            label="開始日"
+          >
+            {dates
+              .filter((d) => d <= endDate)  // 終了日より後を除外
+              .map((d) => (
+                <MenuItem key={d} value={d}>
+                  {d}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
 
-        <div>
-          <p>除外するカテゴリ:</p>
-          {categories.map((cat) => (
-            <label key={cat} style={{ marginRight: "1rem" }}>
-              <input
-                type="checkbox"
-                checked={excludedCategories.includes(cat)}
-                onChange={(e) => {
-                  setExcludedCategories((prev) =>
-                    e.target.checked
-                      ? [...prev, cat]
-                      : prev.filter((c) => c !== cat)
-                  );
-                }}
-              />
-              {cat}
-            </label>
-          ))}
-        </div>
+        <FormControl style={{ marginRight: "1rem", minWidth: 140 }}>
+          <InputLabel>終了日</InputLabel>
+          <Select
+            value={endDate}
+            onChange={(e) => setEndDate(e.target.value)}
+            label="終了日"
+          >
+            {dates
+              .filter((d) => d >= startDate)  // 開始日より前を除外
+              .map((d) => (
+                <MenuItem key={d} value={d}>
+                  {d}
+                </MenuItem>
+              ))}
+          </Select>
+        </FormControl>
+
+      </div>
+
+      <div style={{ marginBottom: "1rem" }}>
+        <p>除外するカテゴリ:</p>
+        {categories.map((cat) => (
+          <label key={cat} style={{ marginRight: "1rem" }}>
+            <input
+              type="checkbox"
+              checked={excludedCategories.includes(cat)}
+              onChange={(e) => {
+                setExcludedCategories((prev) =>
+                  e.target.checked
+                    ? [...prev, cat]
+                    : prev.filter((c) => c !== cat)
+                );
+              }}
+            />
+            {cat}
+          </label>
+        ))}
       </div>
 
       <ReactECharts option={option} style={{ height: "400px" }} />

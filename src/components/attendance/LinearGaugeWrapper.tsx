@@ -1,12 +1,13 @@
 "use client";
-import { useState, useEffect, useRef } from "react";
 import LinearGauge from "@/components/issy/LinearGauge";
+import { useState, useRef,useEffect } from "react";
 import {
   Card,
   CardContent,
   Typography,
   Box,
 } from '@mui/material';
+
 function formatJapaneseNumber(num: number) {
   const oku = Math.floor(num / 100_000_000);
   const man = Math.floor((num % 100_000_000) / 10_000);
@@ -58,37 +59,37 @@ function AnimatedNumber({ value, target }: { value: number; target: number }) {
   }, [value, target]);
 
   return (
-      <>
-        <span
-            className={shake ? "shake" : ""}
-            style={{
-            display: "inline-block",
-            fontWeight: "bold",
-            fontSize: "1.5rem",
-            marginLeft: 10,
-            minWidth: 100,
-            textAlign: "right",
-            fontVariantNumeric: "tabular-nums",
-            transition: "transform 0.3s",
-            }}
-            title={displayValue.toLocaleString()}
-        >
-            {formatJapaneseNumber(displayValue)}
-        </span>
+    <>
+      <span
+        className={shake ? "shake" : ""}
+        style={{
+          display: "inline-block",
+          fontWeight: "bold",
+          fontSize: "1.5rem",
+          marginLeft: 10,
+          minWidth: 100,
+          textAlign: "right",
+          fontVariantNumeric: "tabular-nums",
+          transition: "transform 0.3s",
+        }}
+        title={displayValue.toLocaleString()}
+      >
+        {formatJapaneseNumber(displayValue)}
+      </span>
 
-        <style>{`
-            @keyframes shake-rotate {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(10deg); }
-            50% { transform: rotate(-4deg); }
-            75% { transform: rotate(2deg); }
-            100% { transform: rotate(0deg); }
-            }
-            .shake {
-            animation: shake-rotate 0.3s ease;
-            }
-        `}</style>
-      </>
+      <style>{`
+        @keyframes shake-rotate {
+          0% { transform: rotate(0deg); }
+          25% { transform: rotate(10deg); }
+          50% { transform: rotate(-4deg); }
+          75% { transform: rotate(2deg); }
+          100% { transform: rotate(0deg); }
+        }
+        .shake {
+          animation: shake-rotate 0.3s ease;
+        }
+      `}</style>
+    </>
   );
 }
 
@@ -98,53 +99,61 @@ export default function Home() {
   const max = 320_000_000;
   const target = 300_000_000;
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      // 500万〜3700万のランダム増加（例）
-      const inc = Math.floor(Math.random() * (37_000_000 - 5_000_000 + 1)) + 5_000_000;
-
-      setIncrement(inc);
-      setValue((v) => {
-        if (v >= max) return 0;
-        return Math.min(v + inc, max);
-      });
-    }, 1000);
-    return () => clearInterval(interval);
-  }, [max]);
+  const handleUpdate = () => {
+    const inc = Math.floor(Math.random() * (37_000_000 - 5_000_000 + 1)) + 5_000_000;
+    setIncrement(inc);
+    setValue((v) => {
+      if (v >= max) return 0;
+      return Math.min(v + inc, max);
+    });
+  };
 
   return (
     <Card variant="outlined" sx={{ height: '100%', flexGrow: 1 }}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          棒状のゲージ
+      棒状のゲージ
         </Typography>
         <Typography variant="body1" gutterBottom>
-          ある量の進捗や割合を視覚的に直感的に示すためのUIコンポーネントです。<br/>
-          棒状のゲージが長さや色で値の大小や状態を表現し、瞬時に状況把握を助けます。<br/>
-          色やアニメーションを付けることで感情的なインパクトも演出できます。
+      止まっている状態ではこんな感じです。
         </Typography>
         <Typography variant="body1" gutterBottom component="div">
-          <div style={{ padding: 20, maxWidth: 500 }}>
-            <h1>今期の売上進捗</h1>
-            <LinearGauge value={value} max={max} target={target} height={30} />
-            <div
-              style={{
-                marginTop: 12,
-                fontSize: 24,
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <span>売上: </span>
-              <AnimatedNumber value={value} target={target} />
-              <span> 円</span>
-            </div>
-            <div style={{ marginTop: 8, fontSize: 16, color: "#555" }}>
-              増分: +{formatJapaneseNumber(increment)} 円
-            </div>
-          </div>
+          <h1>今期の売上進捗</h1>
+      <div style={{ padding: 20, maxWidth: 500 }}>
+        <LinearGauge value={value} max={max} target={target} height={30} />
+        <div
+          style={{
+            marginTop: 12,
+            fontSize: 24,
+            display: "flex",
+            alignItems: "center",
+          }}
+        >
+          <span>売上: </span>
+          <AnimatedNumber value={value} target={target} />
+          <span> 円</span>
+        </div>
+        <div style={{ marginTop: 8, fontSize: 16, color: "#555" }}>
+          増分: +{formatJapaneseNumber(increment)} 円
+        </div>
+        <button
+          onClick={handleUpdate}
+          style={{
+            marginTop: 20,
+            padding: "8px 16px",
+            fontSize: 16,
+            cursor: "pointer",
+            borderRadius: 4,
+            border: "1px solid #ccc",
+            backgroundColor: "#4caf50",
+            color: "white",
+          }}
+        >
+          更新する
+        </button>
+      </div>
         </Typography>
       </CardContent>
-    </Card>
+    </Card> 
   );
 }
