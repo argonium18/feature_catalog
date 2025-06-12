@@ -5,19 +5,19 @@ import {
   Typography,
   Box,
 } from '@mui/material';
-import TimeSeriesFilter from "@/components/issy/TimeSeriesFilter"
-export default function  TimeSeriesFilterWrapper () {
+import AccentDiffFilter from "@/components/issy/AccentDiffFilter"
+export default function  CategoryFilterWrapper () {
   return (
     <Card variant="outlined" sx={{ height: '100%', flexGrow: 1 }}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          時系列フィルター
+          差分の着色
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-          カテゴリフィルターの機能に加え、表示する期間をフィルターする機能と移動平均による平滑化機能を備えています。
+          抽出前との差分が赤い領域で表示されます。<br/>
         </Typography>
         <Typography variant="body1" gutterBottom component="div">
-          <TimeSeriesFilter/>
+          <AccentDiffFilter/>
         </Typography>
       </CardContent>
     </Card>

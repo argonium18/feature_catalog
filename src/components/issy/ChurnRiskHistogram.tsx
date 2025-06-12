@@ -1,9 +1,11 @@
 // ChurnRiskHistogram.tsx
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as echarts from "echarts";
 import type { ChurnPredict } from "@/components/issy/data/churnPredict";
+
+import { toast } from "react-hot-toast";
 
 type Props = {
   customers: ChurnPredict[];
@@ -14,9 +16,22 @@ type Props = {
 export default function ChurnRiskHistogram({ customers, alertThreshold, onBarClick }: Props) {
   const chartRef = useRef<HTMLDivElement>(null);
 
-  // 対象顧客数と費用の計算
   const alertCustomers = customers.filter((c) => parseFloat(c.churn_risk) >= alertThreshold);
   const campaignCost = alertCustomers.length * 500; // 1人あたり500円（仮）
+
+  const handleExecute = () => {
+    toast.success(
+      <div>
+        <div className="font-semibold">施策を実行しました</div>
+        <ul className="mt-2 list-disc list-inside text-sm max-h-40 overflow-y-auto">
+          {alertCustomers.map((c, i) => (
+            <li key={i}>{c.cusomer_name}（{parseFloat(c.churn_risk).toFixed(2)}）</li>
+          ))}
+        </ul>
+      </div>,
+      { duration: 6000 }
+    );
+  };
 
   useEffect(() => {
     if (!chartRef.current) return;
@@ -34,7 +49,6 @@ export default function ChurnRiskHistogram({ customers, alertThreshold, onBarCli
     });
 
     const binEdges = Array.from({ length: binCount }, (_, i) => `${(i / binCount).toFixed(1)}-${((i + 1) / binCount).toFixed(1)}`);
-
     const alertIndex = Math.floor(alertThreshold * binCount);
 
     chart.setOption({
@@ -68,7 +82,7 @@ export default function ChurnRiskHistogram({ customers, alertThreshold, onBarCli
     chart.off("click");
     chart.on("click", (params) => {
       const index = params.dataIndex;
-      const clickedRisk = (index + 0.5) / binCount; // 中央値でしきい値に
+      const clickedRisk = (index + 0.5) / binCount;
       onBarClick?.(clickedRisk);
     });
 
@@ -84,7 +98,7 @@ export default function ChurnRiskHistogram({ customers, alertThreshold, onBarCli
         {alertCustomers.length} 人 ／ <span className="font-semibold">キャンペーン想定費用：</span>
         {campaignCost.toLocaleString()} 円
         <button
-          onClick={() => alert("施策を実行しました！（モック）")}
+          onClick={handleExecute}
           className="ml-4 px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600"
         >
           キャンペーン施策を実行

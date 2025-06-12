@@ -13,7 +13,11 @@ import CategoryFilterWrapper  from './CategoryFilterWrapper';
 import TimeSeriesFilterWrapper  from './TimeSeriesFilterWrapper';
 import ChurnDashboardWrapper  from './ChurnDashboardWrapper';
 import LinearGaugeWrapper  from './LinearGaugeWrapper';
+import LinearGaugeAutoWrapper  from './LinearGaugeAutoWrapper';
 import FocusSortDash  from './FocusSortDash';
+import AccentDiff from './AccentDiffWrapper'
+import CascadeFilterWrapper from './CascadeFilterWrapper'
+import GroupBarWrapper from './GroupBarWrapper'
 
 export default function AttendanceDashboard() {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -87,7 +91,12 @@ export default function AttendanceDashboard() {
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               指標表示
           </Typography>
-          <LinearGaugeWrapper/>
+          <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+            <LinearGaugeAutoWrapper/>
+          </Grid>
+          <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+            <LinearGaugeWrapper/>
+          </Grid>
         </Grid>
       </Grid>
 
@@ -114,17 +123,6 @@ export default function AttendanceDashboard() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              ソート
-          </Typography>
-        </Grid>
-        <Grid item size={{ xs: 12 }}>
-          <FocusSortDash/>
-        </Grid>
-      </Grid>
-
         <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
           <Grid item size={{ xs: 12 }}>
             <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
@@ -133,6 +131,34 @@ export default function AttendanceDashboard() {
           </Grid>
         <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
           <ChurnDashboardWrapper/>
+        </Grid>
+      </Grid>
+            <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              アクセント
+          </Typography>
+        </Grid>
+        <Grid item size={{ xs: 12 }}>
+          <AccentDiff/>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              インタラクティブなUI
+          </Typography>
+        </Grid>
+        
+        <Grid item size={{ xs: 12 }}>
+          <CascadeFilterWrapper/>
+        </Grid>
+                
+        <Grid item size={{ xs: 12 }}>
+          <GroupBarWrapper/>
+        </Grid>
+        <Grid item size={{ xs: 12 }}>
+          <FocusSortDash/>
         </Grid>
       </Grid>
     </Box>
