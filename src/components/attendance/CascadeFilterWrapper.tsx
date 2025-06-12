@@ -1,6 +1,6 @@
 "use client";
 import React, { useState ,useEffect} from "react";
-import DynamicFilterChartManager  from "@/components/issy/CascadeFilter";
+import DynamicFilterChartManager  from "@/components/issy/CascadeFilter3Lane";
 import * as echarts from "echarts";
 import "@/app/globals.css"
 import {
