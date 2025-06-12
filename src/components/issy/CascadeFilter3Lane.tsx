@@ -101,7 +101,7 @@ export default function DynamicFilterChartManager({
           🔄 選択解除
         </Button>
       )}
-    <div style={{ padding: "1rem" }}>
+    <div style={{ padding: "1rem" }} className="grid grid-cols-3 gap-4">
       {charts.map((chart, index) => (
         <Card
           key={chart.id}
