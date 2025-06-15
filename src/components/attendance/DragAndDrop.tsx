@@ -1,12 +1,12 @@
-// AttendanceDashboard.tsx
+// DragAndDrop.tsx
 import React, { useState } from 'react';
-import { Grid, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import { useAttendanceData } from '../../hooks/useAttendanceData';
 import { useFilters } from '../../hooks/useFilters';
 import { GlobalFilters } from './GlobalFilters';
 import { DonutChart } from './DonutChart';
 import { LineChart } from './LineChart';
-import { BarChart} from './GroupBarChart';
+import { BarChart} from './BarChart';
 import { DraggableWrapper } from '../DraggableWrapper';
 
 export function DragAndDrop() {
@@ -27,15 +27,13 @@ export function DragAndDrop() {
     selectedRows,
   );
 
-  // チャートの順序を管理
   const handleChartReorder = (newOrder: string[]) => {
     setChartOrder(newOrder);
   };
 
-  // チャートコンポーネントマップ
   const chartMap = {
-    donut: (<DonutChart/>),
-    line: (<LineChart/>),
+    donut: <DonutChart />,
+    line: <LineChart />,
     bar: (
       <BarChart
         data={barData.data}

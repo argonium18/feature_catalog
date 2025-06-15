@@ -1,12 +1,10 @@
 import type { 
-  Filters, 
   SummaryData, 
-  StudentTimeSeriesData, 
-  TimeSeriesData, 
-  StudentData, 
-  BarData 
+  RadarChartDataItem,
+  BarChartDataItem,
+  LineChartDataItem,
+  TabelDataItem
 } from '../types/attendance';
-import { SUBJECT_NAMES } from '../constants/attendance';
 
 // サマリーデータの取得
 export const fetchSummary = async (): Promise<SummaryData[]> => {
@@ -23,75 +21,50 @@ export const fetchSummary = async (): Promise<SummaryData[]> => {
 };
 
 //折れ線グラフデータの取得
-export const fetchTimeSeries = async (): Promise<TimeSeriesData[]> => {
+export const fetchTimeSeries = async (): Promise<LineChartDataItem[]> => {
   return [
-    { date: '05-10', rate: 90, price: 2000 },
-    { date: '05-11', rate: 92, price: 2500 },
-    { date: '05-12', rate: 94, price: 2200 },
-    { date: '05-13', rate: 91, price: 2500 },
-    { date: '05-14', rate: 93, price: 2800 },
+    { date: '05-10',price: 2000 },
+    { date: '05-11',price: 2500 },
+    { date: '05-12',price: 2200 },
+    { date: '05-13',price: 2500 },
+    { date: '05-14',price: 2800 },
   ];
 };
 
-
-// テーブルデータの取得
-export const fetchTableData = async (filters: Filters): Promise<StudentData[]> => {
-  // TODO: 実際のAPI呼び出しに置き換える
+//レーダーチャートデータの取得
+export const fetchScore = async (): Promise<RadarChartDataItem[]> => {
   return [
-    { id: 1, name: 'A太郎', class: '1A', status: '欠席', cumulative: 3, alert: true },
-    { id: 2, name: 'B花子', class: '1A', status: '出席', cumulative: 0, alert: false },
-    { id: 3, name: 'C次郎', class: '1B', status: '遅刻', cumulative: 1, alert: true },
-    { id: 4, name: 'D三郎', class: '1B', status: '出席', cumulative: 0, alert: false },
+    { subject: '代数', score: 85 },
+    { subject: '幾何', score: 90 },
+    { subject: '微分', score: 78 },
+    { subject: '積分', score: 88 },
+    { subject: '確率', score: 92 },
+    { subject: '統計', score: 80 },
+    { subject: 'ベクトル', score: 75 },
+    { subject: '数列', score: 89 },
   ];
 };
 
 // 棒グラフデータの取得
-export const fetchBarData = async (
-  filters: Filters, 
-  selectedIds: number[]
-): Promise<BarData> => {
-  // 生徒が選択されている場合は、生徒ごとの科目別出席率を返す
-  if (selectedIds && selectedIds.length > 0) {
-    const studentSubjectData = [];
-    
-    // 選択された各生徒について科目別データを生成
-    for (const id of selectedIds) {
-      const studentName = `生徒${id}`;
-      
-      // 生徒の科目別出席率を生成（ダミーデータ）
-      const subjectRates = SUBJECT_NAMES.map(subject => {
-        // 生徒IDと科目に基づいて少し変化をつける
-        const baseRate = 85 + (id % 5) * 2;
-        const variation = (subject.charCodeAt(0) % 5);
-        return {
-          subject: subject,
-          rate: Math.min(98, Math.max(83, baseRate + variation))
-        };
-      });
-      
-      studentSubjectData.push({
-        studentId: id,
-        name: studentName,
-        subjectRates: subjectRates
-      });
-    }
-    
-    return {
-      type: 'students',
-      subjects: SUBJECT_NAMES,
-      data: studentSubjectData
-    };
-  }
-  
-  // 生徒が選択されていない場合は全体の科目別データを表示
-  return {
-    type: 'overall',
-    data: [
+export const fetchBarData = async (): Promise<BarChartDataItem[]> => {
+  return [
       { name: '数学', rate: 88 },
       { name: '英語', rate: 95 },
       { name: '理科', rate: 92 },
       { name: '国語', rate: 90 },
       { name: '社会', rate: 86 }
-    ]
-  };
+    ];
+};
+
+// テーブルデータの取得
+export const fetchTableData = async (): Promise<TabelDataItem[]> => {
+  return [
+    { id: 1, name: '佐藤　太郎', grade: '1年A組', subject: '数学', score: 85, attendance: '出席', note: '特になし' },
+    { id: 2, name: '鈴木　花子', grade: '1年B組', subject: '英語', score: 92, attendance: '欠席', note: '体調不良' },
+    { id: 3, name: '高橋　一朗', grade: '1年A組', subject: '理科', score: 78, attendance: '遅刻', note: '交通渋滞' },
+    { id: 4, name: '田中　美咲', grade: '1年C組', subject: '社会', score: 88, attendance: '出席', note: '発表優秀' },
+    { id: 5, name: '伊藤　健太', grade: '1年B組', subject: '国語', score: 74, attendance: '出席', note: '要復習' },
+    { id: 6, name: '山本　由美', grade: '1年C組', subject: '音楽', score: 95, attendance: '出席', note: '伴奏担当' },
+    { id: 7, name: '中村　浩二', grade: '1年A組', subject: '体育', score: 81, attendance: '欠席', note: 'けがのため' },
+  ];
 };

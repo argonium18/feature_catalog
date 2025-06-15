@@ -1,3 +1,15 @@
+
+// テーブルヘッダー
+export const headerDefs = [
+  { field: 'id',         headerName: 'ID',        width: 70 },
+  { field: 'name',       headerName: '氏名',      width: 150 },
+  { field: 'grade',      headerName: '学年',      width: 100 },
+  { field: 'subject',    headerName: '科目',      width: 120 },
+  { field: 'score',      headerName: '得点',      width: 80,  type: 'number' },
+  { field: 'attendance', headerName: '出欠',      width: 100 },
+  { field: 'note',       headerName: '備考',      width: 200 },
+];
+
 // クラス一覧
 export const CLASSES = [
   { value: '', label: '全て' },

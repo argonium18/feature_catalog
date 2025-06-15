@@ -1,30 +1,20 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, Typography } from '@mui/material';
+import { createLineChartOption } from '../../utils/chartOptions'
 import ReactECharts from 'echarts-for-react';
 import { fetchTimeSeries } from '../../services/attendanceApi';
 
 export const LineChart: React.FC = () => {
+  
   //折れ線グラフデータ取得
   const { data = [] } = useQuery({
     queryKey: ['timeSeries'],
     queryFn: fetchTimeSeries,
   });
 
-  //グラフ生成オプション
-  const option = {
-    tooltip: { trigger: 'axis' },
-    xAxis: { 
-      type: 'category', 
-      data: data.map(d => d.date) 
-    },
-    yAxis: { type: 'value' },
-    series: [{
-      name: '米の価格',
-      type: 'line',
-      data: data.map(d => d.price),
-    }],
-  };
+  // 折れ線グラフオプション生成
+  const option = createLineChartOption(data);
 
   return (
     <Card variant="outlined" sx={{ height: '100%', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>

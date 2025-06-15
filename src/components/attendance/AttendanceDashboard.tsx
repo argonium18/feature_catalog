@@ -5,10 +5,12 @@ import { useFilters } from '../../hooks/useFilters';
 import { GlobalFilters } from './GlobalFilters';
 import { DonutChart } from './DonutChart';
 import { LineChart } from './LineChart';
-import { BarChart }  from './GroupBarChart';
+import { BarChart }  from './BarChart';
 import { RadarChart }  from './RadarChart';
 import { DragAndDrop } from  './DragAndDrop';
-import StudentTable  from './StudentTable';
+import { MetricsCardCollection } from './MetricsCard';
+import { ColorPickerChart } from './ColorPickerChart';
+import { GridTable } from './StudentTable';
 import CategoryFilterWrapper  from './CategoryFilterWrapper';
 import TimeSeriesFilterWrapper  from './TimeSeriesFilterWrapper';
 import ChurnDashboardWrapper  from './ChurnDashboardWrapper';
@@ -57,13 +59,7 @@ export default function AttendanceDashboard() {
           <LineChart/>
         </Grid>
         <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
-          <BarChart
-            data={barData.data}
-            isLoading={barData.isLoading}
-            selectedRows={selectedRows}
-            filters={barChartFilters}
-            onFilterChange={handleBarChartFilterChange}
-          />
+          <BarChart/>
         </Grid>
         <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
           <RadarChart/>
@@ -77,12 +73,7 @@ export default function AttendanceDashboard() {
           </Typography>
         </Grid>
         <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
-          <StudentTable
-            data={students.data || []}
-            isLoading={students.isLoading}
-            selectedRows={selectedRows}
-            onSelectionChange={setSelectedRows}
-          />
+          <GridTable/>
         </Grid>
       </Grid>
 
@@ -103,10 +94,23 @@ export default function AttendanceDashboard() {
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid item size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              色替え棒グラフ
+          </Typography>
+          <ColorPickerChart/>
+        </Grid>
+      </Grid>
+
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               ドラッグ&ドロップ
           </Typography>
           <DragAndDrop/>
         </Grid>
+      </Grid>
+
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+          <MetricsCardCollection/>
       </Grid>
 
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
