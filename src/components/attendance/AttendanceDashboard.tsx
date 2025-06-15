@@ -13,6 +13,7 @@ import { ColorPickerChart } from './ColorPickerChart';
 import { GridTable } from './GridTable';
 import CategoryFilterWrapper  from './CategoryFilterWrapper';
 import TimeSeriesFilterWrapper  from './TimeSeriesFilterWrapper';
+import TimeSeriesFilterTooltipHoverWrapper  from './TimeSeriesFilterTooltipHoverWrapper';
 import ChurnDashboardWrapper  from './ChurnDashboardWrapper';
 import LinearGaugeWrapper  from './LinearGaugeWrapper';
 import LinearGaugeAutoWrapper  from './LinearGaugeAutoWrapper';
@@ -144,6 +145,9 @@ export default function AttendanceDashboard() {
         </Grid>
         <Grid item size={{ xs: 12 }}>
           <FocusSortDash/>
+        </Grid>
+        <Grid item size={{ xs: 12 }}>
+          <TimeSeriesFilterTooltipHoverWrapper/>
         </Grid>
       </Grid>
     </Box>

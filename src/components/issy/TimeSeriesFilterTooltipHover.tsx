@@ -61,8 +61,20 @@ export default function Page() {
   const diffDelta = originalMA.map((d, i) =>
     Math.abs(originalMA[i].sales - filteredMA[i].sales)
   );
-
+  const allowedTooltipSeries = ["元データ移動平均", "フィルター後移動平均","差分"];  
   const option = {
+    tooltip: {
+      trigger: "axis",
+      formatter: (params: any) => {
+        let str = params[0].axisValue + "<br/>";
+        params.forEach((p: any) => {
+          if (allowedTooltipSeries.includes(p.seriesName)) {
+            str += `${p.marker} ${p.seriesName}: ${p.data}<br/>`;
+          }
+        });
+        return str;
+      },
+    },
     legend: { data: ["元データ移動平均", "フィルター後移動平均"] },
     xAxis: { type: "category", data: visibleDates },
     yAxis: { type: "value" },
@@ -89,7 +101,7 @@ export default function Page() {
         areaStyle: { opacity: 0 },
       },
       {
-        name: "差分領域",
+        name: "差分",
         type: "line",
         data: diffDelta,
         stack: "diff",
