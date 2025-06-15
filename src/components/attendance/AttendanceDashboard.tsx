@@ -26,7 +26,7 @@ export default function AttendanceDashboard() {
   
 
   return (
-    <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' }, py : 4 , '& > *': { p: 3 }}}>
+    <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' }, py : 4 , '& > *': { p: 4 }}}>
       <Typography variant="h3" gutterBottom sx={{ fontWeight: "bold" }}>
           グラフ描画 機能カタログ
       </Typography>
