@@ -1,4 +1,3 @@
-// DraggableWrapper.tsx
 import React, { useState } from 'react';
 import {
   DndContext,
@@ -26,7 +25,13 @@ interface DraggableItemProps {
 }
 
 const DraggableItem: React.FC<DraggableItemProps> = ({ id, children }) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ 
+    id,
+    transition: {
+      duration: 150,
+      easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
+    }
+  });
 
   return (
     <Grid
@@ -39,44 +44,31 @@ const DraggableItem: React.FC<DraggableItemProps> = ({ id, children }) => {
         opacity: isDragging ? 0.5 : 1,
       }}
     >
-      <Box sx={{ 
-        position: 'relative',
-        border: '1px solid #e0e0e0',
-        borderRadius: 1,
-        height: '100%',
-      }}>
-        {/* ドラッグハンドル */}
+      <Box sx={{ position: 'relative' }}>
+        {/* ドラッグハンドル - カード左上に配置 */}
         <Box
           {...attributes}
           {...listeners}
           sx={{
             position: 'absolute',
-            left: 0,
-            top: 0,
-            width: 20,
-            height: '100%',
-            backgroundColor: '#f5f5f5',
-            borderRight: '1px solid #e0e0e0',
+            left: 8,
+            top: 8,
+            width: 24,
+            height: 24,
+            backgroundColor: 'rgba(0,0,0,0.04)',
+            borderRadius: 1,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             cursor: 'grab',
-            zIndex: 1,
-            '&:hover': { backgroundColor: '#eeeeee' },
+            zIndex: 2,
+            '&:hover': { backgroundColor: 'rgba(0,0,0,0.08)' },
             '&:active': { cursor: 'grabbing' },
           }}
         >
-          <DragIndicatorIcon sx={{ fontSize: 14, color: '#999' }} />
+          <DragIndicatorIcon sx={{ fontSize: 16, color: '#666' }} />
         </Box>
-        
-        {/* コンテンツ */}
-        <Box sx={{ 
-          marginLeft: '20px',
-          userSelect: 'text',
-          height: '100%',
-        }}>
-          {children}
-        </Box>
+        {children}
       </Box>
     </Grid>
   );
@@ -84,39 +76,42 @@ const DraggableItem: React.FC<DraggableItemProps> = ({ id, children }) => {
 
 interface DraggableWrapperProps {
   children: React.ReactElement[];
-  onReorder: (newOrder: string[]) => void;
+  onReorder?: (newOrder: string[]) => void;
 }
 
-export const DraggableWrapper: React.FC<DraggableWrapperProps> = ({ children, onReorder }) => {
+export const DraggableWrapper: React.FC<DraggableWrapperProps> = ({ 
+  children, 
+  onReorder = () => {} 
+}) => {
+  const [items, setItems] = useState(children);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [draggedItem, setDraggedItem] = useState<React.ReactElement | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    const id = event.active.id as string;
-    setActiveId(id);
-    setDraggedItem(children.find(child => child.key === id) || null);
+    setActiveId(event.active.id as string);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
 
     if (active.id !== over?.id && over) {
-      const ids = children.map(child => child.key as string);
+      const ids = items.map((_, index) => index.toString());
       const oldIndex = ids.indexOf(active.id as string);
       const newIndex = ids.indexOf(over.id as string);
       
       if (oldIndex !== -1 && newIndex !== -1) {
-        onReorder(arrayMove(ids, oldIndex, newIndex));
+        const newItems = arrayMove(items, oldIndex, newIndex);
+        setItems(newItems);
+        onReorder(newItems.map((_, index) => index.toString()));
       }
     }
-
     setActiveId(null);
-    setDraggedItem(null);
   };
+
+  const draggedItem = activeId ? items[parseInt(activeId)] : null;
 
   return (
     <DndContext
@@ -125,10 +120,13 @@ export const DraggableWrapper: React.FC<DraggableWrapperProps> = ({ children, on
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext items={children.map(child => child.key as string)} strategy={rectSortingStrategy}>
+      <SortableContext 
+        items={items.map((_, index) => index.toString())} 
+        strategy={rectSortingStrategy}
+      >
         <Grid container spacing={2}>
-          {children.map((child) => (
-            <DraggableItem key={child.key} id={child.key as string}>
+          {items.map((child, index) => (
+            <DraggableItem key={index} id={index.toString()}>
               {child}
             </DraggableItem>
           ))}
@@ -150,7 +148,7 @@ export const DraggableWrapper: React.FC<DraggableWrapperProps> = ({ children, on
               backgroundColor: 'white',
               position: 'relative',
             }}>
-              <Box sx={{ marginLeft: '20px' }}>
+              <Box sx={{ position: 'relative' }}>
                 {draggedItem}
               </Box>
             </Box>

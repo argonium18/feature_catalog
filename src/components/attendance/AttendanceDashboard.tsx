@@ -8,9 +8,9 @@ import { LineChart } from './LineChart';
 import { BarChart }  from './BarChart';
 import { RadarChart }  from './RadarChart';
 import { DragAndDrop } from  './DragAndDrop';
-import { MetricsCardCollection } from './MetricsCard';
+import { DraggableMetrics } from './DraggableMetrics';
 import { ColorPickerChart } from './ColorPickerChart';
-import { GridTable } from './StudentTable';
+import { GridTable } from './GridTable';
 import CategoryFilterWrapper  from './CategoryFilterWrapper';
 import TimeSeriesFilterWrapper  from './TimeSeriesFilterWrapper';
 import ChurnDashboardWrapper  from './ChurnDashboardWrapper';
@@ -24,21 +24,6 @@ import GroupBarWrapper from './GroupBarWrapper'
 export default function AttendanceDashboard() {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
   
-  const {
-    globalFilters,
-    lineChartFilters,
-    barChartFilters,
-    handleGlobalFilterChange,
-    handleLineChartFilterChange,
-    handleBarChartFilterChange
-  } = useFilters();
-
-  const { summary, students, timeSeries, barData } = useAttendanceData(
-    globalFilters, 
-    selectedRows,
-    lineChartFilters,
-    barChartFilters
-  );
 
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' }, py : 4 , '& > *': { p: 3 }}}>
@@ -105,12 +90,8 @@ export default function AttendanceDashboard() {
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               ドラッグ&ドロップ
           </Typography>
-          <DragAndDrop/>
+          <DraggableMetrics/>
         </Grid>
-      </Grid>
-
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-          <MetricsCardCollection/>
       </Grid>
 
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
