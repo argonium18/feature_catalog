@@ -21,6 +21,7 @@ import FocusSortDash  from './FocusSortDash';
 import AccentDiff from './AccentDiffWrapper'
 import CascadeFilterWrapper from './CascadeFilterWrapper'
 import GroupBarWrapper from './GroupBarWrapper'
+import SortGraphWrapper from './SortGraphWrapper'
 
 export default function AttendanceDashboard() {
   const [selectedRows, setSelectedRows] = useState<number[]>([]);
@@ -106,6 +107,18 @@ export default function AttendanceDashboard() {
         </Grid>
         <Grid item size={{ xs: 12 }}>
           <TimeSeriesFilterWrapper/>
+        </Grid>
+      </Grid>
+
+      
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid item size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              ソート
+          </Typography>
+        </Grid>
+        <Grid item size={{ xs: 12 }}>
+          <SortGraphWrapper/>
         </Grid>
       </Grid>
 
