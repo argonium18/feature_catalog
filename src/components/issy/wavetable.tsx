@@ -4,23 +4,26 @@ import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import Papa from "papaparse";
 
+// PlotlyのSSR対応
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-function parseCSV(file: File): Promise<
+// CSVパース（自動ロード用）
+async function fetchAndParseCSV(url: string): Promise<
   Array<{ Recency: number; Frequency: number; Monetary: number }>
 > {
+  const res = await fetch(url);
+  const text = await res.text();
   return new Promise((resolve, reject) => {
-    Papa.parse(file, {
+    Papa.parse<string>(text, {
       header: true,
       dynamicTyping: true,
-      complete: (results) => {
-        resolve(results.data as any);
-      },
-      error: (err) => reject(err),
+      complete: (results) => resolve(results.data as any),
+      error: (err: Error) => reject(err),
     });
   });
 }
 
+// RFM → 3Dグリッド + 最大値
 function convertRFMTo3DGrid(records: any[], size = 20) {
   const grid = Array.from({ length: size }, () =>
     Array.from({ length: size }, () => Array(size).fill(0))
@@ -36,40 +39,58 @@ function convertRFMTo3DGrid(records: any[], size = 20) {
     grid[rIdx][fIdx][mIdx] += 1;
   }
 
-  return grid;
+  return { grid, maxR, maxF, maxM };
 }
 
-export default function Wavetable() {
-  const size = 20;
+export default function Page() {
+  const size = 20; // グリッドの粒度
   const [grid, setGrid] = useState<number[][][] | null>(null);
+  const [maxR, setMaxR] = useState(1);
+  const [maxF, setMaxF] = useState(1);
+  const [maxM, setMaxM] = useState(1);
+
   const [xR, setXR] = useState<number[]>([]);
   const [yF, setYF] = useState<number[]>([]);
   const [zM, setZM] = useState<number[]>([]);
   const [value, setValue] = useState<number[]>([]);
+
   const [heatmapZ, setHeatmapZ] = useState<number[][]>([]);
+  const [heatmapX, setHeatmapX] = useState<number[]>([]);
+  const [heatmapY, setHeatmapY] = useState<number[]>([]);
+
   const [sliceIndex, setSliceIndex] = useState(0);
 
-  const handleCSVUpload = async (file: File) => {
-    const raw = await parseCSV(file);
-    const records = raw.filter(
-      (r) =>
-        typeof r.Recency === "number" &&
-        typeof r.Frequency === "number" &&
-        typeof r.Monetary === "number"
-    );
+  // ✅ 初回ロードでCSVを自動fetch
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const raw = await fetchAndParseCSV("/data/rfm.csv");
+        const records = raw.filter(
+          (r) =>
+            Number.isFinite(r.Recency) &&
+            Number.isFinite(r.Frequency) &&
+            Number.isFinite(r.Monetary)
+        );
+        if (records.length === 0) {
+          alert("RFM列が見つかりません。CSVを確認してください。");
+          return;
+        }
+        const { grid, maxR, maxF, maxM } = convertRFMTo3DGrid(records, size);
+        setGrid(grid);
+        setMaxR(maxR);
+        setMaxF(maxF);
+        setMaxM(maxM);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    load();
+  }, []);
 
-    if (records.length === 0) {
-      alert("RFM列が見つかりません。CSVを確認してください。");
-      return;
-    }
-
-    const grid = convertRFMTo3DGrid(records, size);
-    setGrid(grid); // 🔁 useEffectでflattenとheatmapZを自動処理
-  };
-
-  // flatten（xR, yF, zM, value）をgridから生成
+  // flatten + heatmap 軸tick生成
   useEffect(() => {
     if (!grid) return;
+
     const xR: number[] = [];
     const yF: number[] = [];
     const zM: number[] = [];
@@ -78,9 +99,9 @@ export default function Wavetable() {
     for (let r = 0; r < size; r++) {
       for (let f = 0; f < size; f++) {
         for (let m = 0; m < size; m++) {
-          xR.push(r);
-          yF.push(f);
-          zM.push(m);
+          xR.push((r / (size - 1)) * maxR);
+          yF.push((f / (size - 1)) * maxF);
+          zM.push((m / (size - 1)) * maxM);
           value.push(grid[r][f][m]);
         }
       }
@@ -90,9 +111,14 @@ export default function Wavetable() {
     setYF(yF);
     setZM(zM);
     setValue(value);
-  }, [grid]);
 
-  // ヒートマップを sliceIndex に応じて再計算
+    const hX = Array.from({ length: size }, (_, i) => (i / (size - 1)) * maxR);
+    const hY = Array.from({ length: size }, (_, i) => (i / (size - 1)) * maxF);
+    setHeatmapX(hX);
+    setHeatmapY(hY);
+  }, [grid, maxR, maxF, maxM]);
+
+  // sliceIndex に応じたヒートマップ生成
   useEffect(() => {
     if (!grid) return;
     const heatmap: number[][] = [];
@@ -100,7 +126,7 @@ export default function Wavetable() {
     for (let r = 0; r < size; r++) {
       const row = [];
       for (let f = 0; f < size; f++) {
-        row.push(grid[r][f][sliceIndex]); // M = sliceIndex の断面
+        row.push(grid[r][f][sliceIndex]);
       }
       heatmap.push(row);
     }
@@ -113,7 +139,11 @@ export default function Wavetable() {
 
   return (
     <div style={{ padding: 20 }}>
-      <h2>M軸のスライス位置: {sliceIndex}</h2>
+      <h2>
+        M軸のスライス位置: {sliceIndex} (Monetary ~{" "}
+        {(sliceIndex / (size - 1) * maxM).toFixed(2)})
+      </h2>
+
       <input
         type="range"
         min={0}
@@ -123,19 +153,12 @@ export default function Wavetable() {
         style={{ width: 400 }}
       />
 
-      <input
-        type="file"
-        accept=".csv"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) handleCSVUpload(file);
-        }}
-      />
-
       <Plot
         data={[
           {
             z: heatmapZ,
+            x: heatmapX,
+            y: heatmapY,
             type: "heatmap",
             colorscale: "Viridis",
           },
@@ -143,9 +166,12 @@ export default function Wavetable() {
         layout={{
           width: 600,
           height: 500,
-          title: "2Dヒートマップ（R×F）",
-          xaxis: { title: { text: "R" } },
-          yaxis: { title: { text: "F" } },
+          title: `2Dヒートマップ (Recency × Frequency @ Monetary=${(
+            (sliceIndex / (size - 1)) *
+            maxM
+          ).toFixed(2)})`,
+          xaxis: { title: { text: "Recency" } },
+          yaxis: { title: { text: "Frequency" } },
         }}
       />
 
@@ -163,7 +189,7 @@ export default function Wavetable() {
             surface: { count: 10 },
             colorscale: "Blues",
             name: "全体構造",
-            caps: { x: { show: true }, y: { show: true }, z: { show: false } }
+            caps: { x: { show: false }, y: { show: false }, z: { show: false } },
           },
           {
             type: "isosurface",
@@ -171,19 +197,19 @@ export default function Wavetable() {
             y: yF,
             z: zM,
             value: value,
-            isomin: vMin,
+            isomin: 0.1,
             isomax: vMax,
             slices: {
               z: {
                 show: true,
-                locations: [sliceIndex],
+                locations: [(sliceIndex / (size - 1)) * maxM],
               },
             },
             surface: { show: false },
-            opacity: 0.7,
+            opacity: 2,
             colorscale: "Reds",
             name: "スライス",
-            caps: { x: { show: false }, y: { show: false }, z: { show: true } }
+            caps: { x: { show: false }, y: { show: false }, z: { show: false } },
           },
         ]}
         layout={{
@@ -191,9 +217,9 @@ export default function Wavetable() {
           height: 600,
           title: "3Dボリュームと断面",
           scene: {
-            xaxis: { title: { text: "R" } },
-            yaxis: { title: { text: "F" } },
-            zaxis: { title: { text: "M" } },
+            xaxis: { title: { text: "Recency" } },
+            yaxis: { title: { text: "Frequency" } },
+            zaxis: { title: { text: "Monetary" } },
             camera: { eye: { x: 1.3, y: -1.3, z: 1.3 } },
           },
         }}
