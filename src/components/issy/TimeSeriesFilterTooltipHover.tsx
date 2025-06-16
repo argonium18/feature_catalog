@@ -1,13 +1,15 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import ReactECharts from "echarts-for-react";
 import { rawData } from "@/components/issy/data/salesTimeSeries";
 import {
-  Select,
-  MenuItem,
   FormControl,
   InputLabel,
+  Select,
+  MenuItem,
+  Slider,
+  Typography,
 } from "@mui/material";
 
 export default function Page() {
@@ -16,12 +18,17 @@ export default function Page() {
 
   const [windowSize, setWindowSize] = useState(2);
   const [excludedCategories, setExcludedCategories] = useState<string[]>([]);
-  const [startDate, setStartDate] = useState(dates[0]);
-  const [endDate, setEndDate] = useState(dates[dates.length - 1]);
+
+  // Range Slider: インデックスを管理
+  const [range, setRange] = useState<[number, number]>([0, dates.length - 1]);
+
+  // インデックスから日付に変換
+  const startDate = dates[range[0]];
+  const endDate = dates[range[1]];
 
   const visibleDates = useMemo(() => {
-    return dates.filter((d) => d >= startDate && d <= endDate);
-  }, [dates, startDate, endDate]);
+    return dates.slice(range[0], range[1] + 1);
+  }, [dates, range]);
 
   const originalSeries = useMemo(() => {
     return visibleDates.map((date) => {
@@ -61,7 +68,7 @@ export default function Page() {
   const diffDelta = originalMA.map((d, i) =>
     Math.abs(originalMA[i].sales - filteredMA[i].sales)
   );
-  const allowedTooltipSeries = ["元データ移動平均", "フィルター後移動平均","差分"];  
+ const allowedTooltipSeries = ["元データ", "フィルター後","差分"];  
   const option = {
     tooltip: {
       trigger: "axis",
@@ -75,19 +82,19 @@ export default function Page() {
         return str;
       },
     },
-    legend: { data: ["元データ移動平均", "フィルター後移動平均"] },
+    legend: { data: ["元データ", "フィルター後"] },
     xAxis: { type: "category", data: visibleDates },
     yAxis: { type: "value" },
     series: [
       {
-        name: "元データ移動平均",
+        name: "元データ",
         type: "line",
         data: originalMA.map((d) => d.sales),
         lineStyle: { type: "dotted" },
         smooth: false,
       },
       {
-        name: "フィルター後移動平均",
+        name: "フィルター後",
         type: "line",
         data: filteredMA.map((d) => d.sales),
         smooth: false,
@@ -113,6 +120,11 @@ export default function Page() {
     ],
   };
 
+  // スライダー値変更ハンドラ
+  const handleRangeChange = (event: Event, newValue: number | number[]) => {
+    setRange(newValue as [number, number]);
+  };
+
   return (
     <div style={{ padding: "1rem" }}>
       <div style={{ marginBottom: "1rem" }}>
@@ -130,43 +142,27 @@ export default function Page() {
             ))}
           </Select>
         </FormControl>
-        <FormControl style={{ marginRight: "1rem", minWidth: 140 }}>
-          <InputLabel>開始日</InputLabel>
-          <Select
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            label="開始日"
-          >
-            {dates
-              .filter((d) => d <= endDate)  // 終了日より後を除外
-              .map((d) => (
-                <MenuItem key={d} value={d}>
-                  {d}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-
-        <FormControl style={{ marginRight: "1rem", minWidth: 140 }}>
-          <InputLabel>終了日</InputLabel>
-          <Select
-            value={endDate}
-            onChange={(e) => setEndDate(e.target.value)}
-            label="終了日"
-          >
-            {dates
-              .filter((d) => d >= startDate)  // 開始日より前を除外
-              .map((d) => (
-                <MenuItem key={d} value={d}>
-                  {d}
-                </MenuItem>
-              ))}
-          </Select>
-        </FormControl>
-
       </div>
 
-      <div style={{ marginBottom: "1rem" }}>
+      <Typography gutterBottom>
+        表示範囲: {startDate} ~ {endDate}
+      </Typography>
+      <Slider
+        value={range}
+        min={0}
+        max={dates.length - 1}
+        onChange={handleRangeChange}
+        valueLabelDisplay="on"
+        step={1}
+        disableSwap 
+        marks={[
+          { value: 0, label: dates[0] },
+          { value: dates.length - 1, label: dates[dates.length - 1] },
+        ]}
+      />
+
+
+      <div style={{ marginBottom: "1rem", marginTop: "1rem" }}>
         <p>除外するカテゴリ:</p>
         {categories.map((cat) => (
           <label key={cat} style={{ marginRight: "1rem" }}>
