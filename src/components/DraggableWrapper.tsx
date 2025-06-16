@@ -6,17 +6,17 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragStartEvent,
   DragOverlay,
-  DragStartEvent
 } from '@dnd-kit/core';
 import {
   arrayMove,
   SortableContext,
   rectSortingStrategy,
+  useSortable,
 } from '@dnd-kit/sortable';
-import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { Grid, Box } from '@mui/material';
+import { Box } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 interface DraggableItemProps {
@@ -25,52 +25,45 @@ interface DraggableItemProps {
 }
 
 const DraggableItem: React.FC<DraggableItemProps> = ({ id, children }) => {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ 
-    id,
-    transition: {
-      duration: 150,
-      easing: 'cubic-bezier(0.25, 1, 0.5, 1)',
-    }
-  });
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id });
 
   return (
-    <Grid
-      item
-      size={{ xs: 12, sm: 6, lg: 4 }}
+    <Box
       ref={setNodeRef}
       sx={{
+        flex: '1 1 300px',
+        minWidth: 300,
+        maxWidth: 400,
+        position: 'relative',
         transform: CSS.Transform.toString(transform),
         transition,
         opacity: isDragging ? 0.5 : 1,
       }}
     >
-      <Box sx={{ position: 'relative' }}>
-        {/* ドラッグハンドル - カード左上に配置 */}
-        <Box
-          {...attributes}
-          {...listeners}
-          sx={{
-            position: 'absolute',
-            left: 8,
-            top: 8,
-            width: 24,
-            height: 24,
-            backgroundColor: 'rgba(0,0,0,0.04)',
-            borderRadius: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            cursor: 'grab',
-            zIndex: 2,
-            '&:hover': { backgroundColor: 'rgba(0,0,0,0.08)' },
-            '&:active': { cursor: 'grabbing' },
-          }}
-        >
-          <DragIndicatorIcon sx={{ fontSize: 16, color: '#666' }} />
-        </Box>
-        {children}
+      <Box
+        {...attributes}
+        {...listeners}
+        sx={{
+          position: 'absolute',
+          left: 8,
+          top: 8,
+          width: 24,
+          height: 24,
+          bgcolor: 'rgba(0,0,0,0.04)',
+          borderRadius: 1,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          cursor: 'grab',
+          zIndex: 2,
+          '&:hover': { bgcolor: 'rgba(0,0,0,0.08)' },
+          '&:active': { cursor: 'grabbing' },
+        }}
+      >
+        <DragIndicatorIcon sx={{ fontSize: 16, color: '#666' }} />
       </Box>
-    </Grid>
+      {children}
+    </Box>
   );
 };
 
@@ -79,39 +72,35 @@ interface DraggableWrapperProps {
   onReorder?: (newOrder: string[]) => void;
 }
 
-export const DraggableWrapper: React.FC<DraggableWrapperProps> = ({ 
-  children, 
-  onReorder = () => {} 
+export const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
+  children,
+  onReorder = () => {},
 }) => {
-  const [items, setItems] = useState(children);
-  const [activeId, setActiveId] = useState<string | null>(null);
+  const ids = children.map((child) => child.key!.toString());
+  const [order, setOrder] = useState(ids);
+  const [draggedId, setDraggedId] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } })
   );
 
   const handleDragStart = (event: DragStartEvent) => {
-    setActiveId(event.active.id as string);
+    setDraggedId(event.active.id as string);
   };
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event;
-
-    if (active.id !== over?.id && over) {
-      const ids = items.map((_, index) => index.toString());
-      const oldIndex = ids.indexOf(active.id as string);
-      const newIndex = ids.indexOf(over.id as string);
-      
-      if (oldIndex !== -1 && newIndex !== -1) {
-        const newItems = arrayMove(items, oldIndex, newIndex);
-        setItems(newItems);
-        onReorder(newItems.map((_, index) => index.toString()));
-      }
+    if (over && active.id !== over.id) {
+      const oldIndex = order.indexOf(active.id as string);
+      const newIndex = order.indexOf(over.id as string);
+      const newOrder = arrayMove(order, oldIndex, newIndex);
+      setOrder(newOrder);
+      onReorder(newOrder);
     }
-    setActiveId(null);
+    setDraggedId(null);
   };
 
-  const draggedItem = activeId ? items[parseInt(activeId)] : null;
+  const draggedChild = draggedId ? children.find((c) => c.key === draggedId) : null;
 
   return (
     <DndContext
@@ -120,38 +109,31 @@ export const DraggableWrapper: React.FC<DraggableWrapperProps> = ({
       onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
     >
-      <SortableContext 
-        items={items.map((_, index) => index.toString())} 
-        strategy={rectSortingStrategy}
-      >
-        <Grid container spacing={2}>
-          {items.map((child, index) => (
-            <DraggableItem key={index} id={index.toString()}>
-              {child}
-            </DraggableItem>
-          ))}
-        </Grid>
+      <SortableContext items={order} strategy={rectSortingStrategy}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2, width: '100%' }}>
+          {order.map((id) => {
+            const child = children.find((c) => c.key === id)!;
+            return (
+              <DraggableItem key={id} id={id}>
+                {child}
+              </DraggableItem>
+            );
+          })}
+        </Box>
       </SortableContext>
 
       <DragOverlay>
-        {draggedItem && (
-          <Box sx={{ 
-            width: 'auto',
-            transform: 'rotate(3deg)',
-            opacity: 0.9,
-            boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
-            pointerEvents: 'none',
-          }}>
-            <Box sx={{ 
-              border: '1px solid #e0e0e0',
-              borderRadius: 1,
-              backgroundColor: 'white',
-              position: 'relative',
-            }}>
-              <Box sx={{ position: 'relative' }}>
-                {draggedItem}
-              </Box>
-            </Box>
+        {draggedChild && (
+          <Box
+            sx={{
+              rotate: '3deg',
+              opacity: 0.9,
+              boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+              minWidth: 300,
+              maxWidth: 400,
+            }}
+          >
+            {draggedChild}
           </Box>
         )}
       </DragOverlay>

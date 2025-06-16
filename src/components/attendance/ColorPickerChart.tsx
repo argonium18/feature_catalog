@@ -3,21 +3,17 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, Cell, CartesianGrid } from 'recha
 import { Box, Typography, IconButton, Paper, Card, CardContent } from '@mui/material';
 
 export const ColorPickerChart = () => {
-  const colors = [
-  '#5470C6', '#91CC75', '#EE6666',
-  '#FAC858', '#73C0DE', '#3BA272',
-  '#FC8452', '#9A60B4', '#EA7CCC'
-];
+  const colors = [ '#91CC75', '#5470C6', '#EE6666','#FAC858', '#73C0DE'];
 
   
   const [data, setData] = useState([
     { name: '月', value: 120, color: colors[0] },
-    { name: '火', value: 200, color: colors[1] },
-    { name: '水', value: 150, color: colors[2] },
-    { name: '木', value: 80, color: colors[3] },
-    { name: '金', value: 70, color: colors[4] },
+    { name: '火', value: 200, color: colors[0] },
+    { name: '水', value: 150, color: colors[0] },
+    { name: '木', value: 80, color: colors[0] },
+    { name: '金', value: 70, color: colors[0] },
     { name: '土', value: 110, color: colors[0] },
-    { name: '日', value: 130, color: colors[1] }
+    { name: '日', value: 130, color: colors[0] }
   ]);
 
   const [selectedBar, setSelectedBar] = useState(null);

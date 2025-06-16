@@ -22,7 +22,7 @@ export default function ChurnRiskHistogram({ customers, alertThreshold, onBarCli
   const handleExecute = () => {
     toast.success(
       <div>
-        <div className="font-semibold">施策を実行しました</div>
+        <div className="font-semibold">施策を実行しました（モック）</div>
         <ul className="mt-2 list-disc list-inside text-sm max-h-40 overflow-y-auto">
           {alertCustomers.map((c, i) => (
             <li key={i}>{c.cusomer_name}（{parseFloat(c.churn_risk).toFixed(2)}）</li>
