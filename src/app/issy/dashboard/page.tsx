@@ -1,36 +1,26 @@
 "use client";
 import React, { useState ,useEffect} from "react";
 import { Card, CardHeader, CardContent } from "@/components/issy/ui/card";
-import DynamicFilterChartManager  from "@/components/issy/CascadeFilter";
-import RechartsGroupedBar  from "@/components/issy/BarChart";
-import Wavetable  from "@/components/issy/wavetable";
+import Wavetable  from "@/components/issy/Wavetable";
+import Tooltip  from "@/components/issy/Tooltip";
 import * as echarts from "echarts";
 import "@/app/globals.css"
 export default function DashboardPage() {
-  const [highlightDate, setHighlightDate] = useState<string | null>(null);
-  useEffect(() => {
-    echarts.disconnect("linked-group");
-    echarts.connect("linked-group");
-  }, []);
   return (
     
-    <div className="grid grid-cols-3 gap-4">
-      {/* カスケードカード */}
+    <div>
+      {/* Wavetable */}
       <Card>
         <CardContent>
-          <h2>選択された日付: {highlightDate ?? "なし"}</h2>
-          <DynamicFilterChartManager
-          highlightDate={highlightDate}
-          onDateClick={(date: string | null) => setHighlightDate(date)}
-          />
+          <Wavetable/>
         </CardContent>
       </Card>
 
-      {/* KPIカード */}
-      <Card className="col-span-2">
-        <CardHeader>棒グラフ（カテゴリ）</CardHeader>
+      {/* ツールチップ */}
+      <Card>
+        <CardHeader>ツールチップ</CardHeader>
         <CardContent>
-          <RechartsGroupedBar targetMonth={highlightDate ? highlightDate.slice(0, 7) : null}/>
+          <Tooltip/>
         </CardContent>
       </Card>
     </div>
