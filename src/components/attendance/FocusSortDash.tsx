@@ -21,7 +21,7 @@ export default function DashboardPage() {
         <Card variant="outlined" sx={{ height: '100%', flexGrow: 1 }}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
-              2種類のソートグラフの連動
+              複数のグラフの連動
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
                 とある小売業の売り上げデータを日付でソートしたグラフと売り上げでソートしたグラフを表示しています。<br/>
