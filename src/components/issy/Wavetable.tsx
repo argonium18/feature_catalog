@@ -2,26 +2,17 @@
 
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
-import Papa from "papaparse";
+import { RFMData } from "@/components/issy/data/RFMData"; 
 
-// PlotlyのSSR対応
+import {
+  Card,
+  CardHeader,
+  CardContent,
+  Typography,
+  Box,
+} from '@mui/material';
+
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
-
-// CSVパース（自動ロード用）
-async function fetchAndParseCSV(url: string): Promise<
-  Array<{ Recency: number; Frequency: number; Monetary: number }>
-> {
-  const res = await fetch(url);
-  const text = await res.text();
-  return new Promise((resolve, reject) => {
-    Papa.parse<string>(text, {
-      header: true,
-      dynamicTyping: true,
-      complete: (results) => resolve(results.data as any),
-      error: (err: Error) => reject(err),
-    });
-  });
-}
 
 // RFM → 3Dグリッド + 最大値
 function convertRFMTo3DGrid(records: any[], size = 20) {
@@ -43,7 +34,7 @@ function convertRFMTo3DGrid(records: any[], size = 20) {
 }
 
 export default function Page() {
-  const size = 20; // グリッドの粒度
+  const size = 20;
   const [grid, setGrid] = useState<number[][][] | null>(null);
   const [maxR, setMaxR] = useState(1);
   const [maxF, setMaxF] = useState(1);
@@ -60,34 +51,15 @@ export default function Page() {
 
   const [sliceIndex, setSliceIndex] = useState(0);
 
-  // ✅ 初回ロードでCSVを自動fetch
   useEffect(() => {
-    const load = async () => {
-      try {
-        const raw = await fetchAndParseCSV("/data/rfm.csv");
-        const records = raw.filter(
-          (r) =>
-            Number.isFinite(r.Recency) &&
-            Number.isFinite(r.Frequency) &&
-            Number.isFinite(r.Monetary)
-        );
-        if (records.length === 0) {
-          alert("RFM列が見つかりません。CSVを確認してください。");
-          return;
-        }
-        const { grid, maxR, maxF, maxM } = convertRFMTo3DGrid(records, size);
-        setGrid(grid);
-        setMaxR(maxR);
-        setMaxF(maxF);
-        setMaxM(maxM);
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    load();
+    const records = RFMData; 
+    const { grid, maxR, maxF, maxM } = convertRFMTo3DGrid(records, size);
+    setGrid(grid);
+    setMaxR(maxR);
+    setMaxF(maxF);
+    setMaxM(maxM);
   }, []);
 
-  // flatten + heatmap 軸tick生成
   useEffect(() => {
     if (!grid) return;
 
@@ -118,7 +90,6 @@ export default function Page() {
     setHeatmapY(hY);
   }, [grid, maxR, maxF, maxM]);
 
-  // sliceIndex に応じたヒートマップ生成
   useEffect(() => {
     if (!grid) return;
     const heatmap: number[][] = [];
@@ -138,92 +109,100 @@ export default function Page() {
   const vMax = Math.max(...value);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h2>
-        M軸のスライス位置: {sliceIndex} (Monetary ~{" "}
-        {(sliceIndex / (size - 1) * maxM).toFixed(2)})
-      </h2>
+    <div className="grid grid-cols-2 gap-4">
+      <Card  className="col-span-1">
+        <CardHeader>ツールチップ</CardHeader>
+        <CardContent>
+          <h2>
+            M軸のスライス位置: {sliceIndex} (Monetary ~{" "}
+            {(sliceIndex / (size - 1) * maxM).toFixed(2)})
+          </h2>
 
-      <input
-        type="range"
-        min={0}
-        max={size - 1}
-        value={sliceIndex}
-        onChange={(e) => setSliceIndex(Number(e.target.value))}
-        style={{ width: 400 }}
-      />
+          <input
+            type="range"
+            min={0}
+            max={size - 1}
+            value={sliceIndex}
+            onChange={(e) => setSliceIndex(Number(e.target.value))}
+            style={{ width: 400 }}
+          />
 
-      <Plot
-        data={[
-          {
-            z: heatmapZ,
-            x: heatmapX,
-            y: heatmapY,
-            type: "heatmap",
-            colorscale: "Viridis",
-          },
-        ]}
-        layout={{
-          width: 600,
-          height: 500,
-          title: `2Dヒートマップ (Recency × Frequency @ Monetary=${(
-            (sliceIndex / (size - 1)) *
-            maxM
-          ).toFixed(2)})`,
-          xaxis: { title: { text: "Recency" } },
-          yaxis: { title: { text: "Frequency" } },
-        }}
-      />
-
-      <Plot
-        data={[
-          {
-            type: "volume",
-            x: xR,
-            y: yF,
-            z: zM,
-            value: value,
-            isomin: vMin,
-            isomax: vMax,
-            opacity: 0.1,
-            surface: { count: 10 },
-            colorscale: "Blues",
-            name: "全体構造",
-            caps: { x: { show: false }, y: { show: false }, z: { show: false } },
-          },
-          {
-            type: "isosurface",
-            x: xR,
-            y: yF,
-            z: zM,
-            value: value,
-            isomin: 0.1,
-            isomax: vMax,
-            slices: {
-              z: {
-                show: true,
-                locations: [(sliceIndex / (size - 1)) * maxM],
+          <Plot
+            data={[
+              {
+                z: heatmapZ,
+                x: heatmapX,
+                y: heatmapY,
+                type: "heatmap",
+                colorscale: "Viridis",
               },
-            },
-            surface: { show: false },
-            opacity: 2,
-            colorscale: "Reds",
-            name: "スライス",
-            caps: { x: { show: false }, y: { show: false }, z: { show: false } },
-          },
-        ]}
-        layout={{
-          width: 700,
-          height: 600,
-          title: "3Dボリュームと断面",
-          scene: {
-            xaxis: { title: { text: "Recency" } },
-            yaxis: { title: { text: "Frequency" } },
-            zaxis: { title: { text: "Monetary" } },
-            camera: { eye: { x: 1.3, y: -1.3, z: 1.3 } },
-          },
-        }}
-      />
+            ]}
+            layout={{
+              width: 600,
+              height: 500,
+              title: `2Dヒートマップ (Recency × Frequency @ Monetary=${(
+                (sliceIndex / (size - 1)) *
+                maxM
+              ).toFixed(2)})`,
+              xaxis: { title: { text: "Recency" } },
+              yaxis: { title: { text: "Frequency" } },
+            }}
+          />
+        </CardContent>
+      </Card>
+      <Card>
+        <CardContent>
+          <Plot
+            data={[
+              {
+                type: "volume",
+                x: xR,
+                y: yF,
+                z: zM,
+                value: value,
+                isomin: vMin,
+                isomax: vMax,
+                opacity: 0.1,
+                surface: { count: 10 },
+                colorscale: "Blues",
+                name: "全体構造",
+                caps: { x: { show: false }, y: { show: false }, z: { show: false } },
+              },
+              {
+                type: "isosurface",
+                x: xR,
+                y: yF,
+                z: zM,
+                value: value,
+                isomin: 0.1,
+                isomax: vMax,
+                slices: {
+                  z: {
+                    show: true,
+                    locations: [(sliceIndex / (size - 1)) * maxM],
+                  },
+                },
+                surface: { show: false },
+                opacity: 2,
+                colorscale: "Reds",
+                name: "スライス",
+                caps: { x: { show: false }, y: { show: false }, z: { show: false } },
+              },
+            ]}
+            layout={{
+              width: 700,
+              height: 600,
+              title: "3Dボリュームと断面",
+              scene: {
+                xaxis: { title: { text: "Recency" } },
+                yaxis: { title: { text: "Frequency" } },
+                zaxis: { title: { text: "Monetary" } },
+                camera: { eye: { x: 1.3, y: -1.3, z: 1.3 } },
+              },
+            }}
+          />
+        </CardContent>
+      </Card>
     </div>
   );
 }
