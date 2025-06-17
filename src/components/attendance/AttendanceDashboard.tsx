@@ -125,6 +125,9 @@ export default function AttendanceDashboard() {
         <Grid item size={{ xs: 12 }}>
           <SortGraphWrapper/>
         </Grid>
+        <Grid item size={{ xs: 12 }}>
+          <GroupBarWrapper/>
+        </Grid>
       </Grid>
 
         <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
@@ -153,19 +156,14 @@ export default function AttendanceDashboard() {
               インタラクティブなUI
           </Typography>
         </Grid>
-        
+        <Grid item size={{ xs: 12 }}>
+          <TimeSeriesFilterTooltipHoverWrapper/>
+        </Grid>
         <Grid item size={{ xs: 12 }}>
           <CascadeFilterWrapper/>
         </Grid>
-                
-        <Grid item size={{ xs: 12 }}>
-          <GroupBarWrapper/>
-        </Grid>
         <Grid item size={{ xs: 12 }}>
           <FocusSortDash/>
-        </Grid>
-        <Grid item size={{ xs: 12 }}>
-          <TimeSeriesFilterTooltipHoverWrapper/>
         </Grid>
       </Grid>
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>

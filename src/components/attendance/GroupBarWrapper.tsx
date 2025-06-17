@@ -20,10 +20,9 @@ export default function DashboardPage() {
     <Card variant="outlined" sx={{ height: '100%', flexGrow: 1 ,}}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-            グループ化棒グラフ
+            グループ別ソート機能
         </Typography>
         <Typography variant="body2" color="text.secondary" >
-            棒グラフでは、量的データ（売上など）に基づいて各対象（例：支店）のパフォーマンスをランキング形式で比較できます。<br/>
             「モード切替」ボタンを押すことで、カテゴリ（例：地域）ごとにグループ化された表示に切り替えることができ、各グループ内での順位や傾向も把握できます。<br/>
         </Typography>
         {/* 棒グラフ */}
