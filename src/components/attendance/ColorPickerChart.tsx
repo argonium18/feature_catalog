@@ -17,19 +17,17 @@ import {
   CardContent,
 } from '@mui/material';
 
-// ----------------------------
-// ✅ バーのデータ型を定義
+// ✅ バーのデータ型
 type BarData = {
   name: string;
   value: number;
   color: string;
 };
 
-// ----------------------------
 // ✅ Tooltip の props 型
 type CustomTooltipProps = {
   active?: boolean;
-  payload?: any;
+  payload?: { payload: BarData }[];
   label?: string;
 };
 
@@ -48,7 +46,7 @@ export const ColorPickerChart = () => {
 
   const [selectedBar, setSelectedBar] = useState<number | null>(null);
 
-  const handleBarClick = (_: any, index: number) => {
+  const handleBarClick = (_: unknown, index: number) => {
     setSelectedBar(selectedBar === index ? null : index);
   };
 
@@ -67,7 +65,7 @@ export const ColorPickerChart = () => {
       <Paper sx={{ p: 1.5 }}>
         <Typography variant="subtitle2">{label}</Typography>
         <Typography variant="body2" color="text.secondary">
-          値: {payload[0].value}
+          値: {payload[0].payload.value}
         </Typography>
         <Typography variant="caption" color="text.secondary">
           クリックして色を変更
@@ -121,6 +119,7 @@ export const ColorPickerChart = () => {
               {colors.map((color, idx) => (
                 <IconButton
                   key={idx}
+                  aria-label={`色${idx + 1}`}
                   onClick={() => changeColor(idx)}
                   sx={{
                     width: 40,
