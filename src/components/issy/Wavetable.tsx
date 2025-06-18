@@ -3,19 +3,21 @@
 import dynamic from "next/dynamic";
 import { useState, useEffect } from "react";
 import { RFMData } from "@/components/issy/data/RFMData"; 
-
+type RFMRecord = {
+  Recency: number;
+  Frequency: number;
+  Monetary: number;
+};
 import {
   Card,
   CardHeader,
   CardContent,
-  Typography,
-  Box,
 } from '@mui/material';
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
 // RFM → 3Dグリッド + 最大値
-function convertRFMTo3DGrid(records: any[], size = 20) {
+function convertRFMTo3DGrid(records: RFMRecord[], size = 20) {
   const grid = Array.from({ length: size }, () =>
     Array.from({ length: size }, () => Array(size).fill(0))
   );

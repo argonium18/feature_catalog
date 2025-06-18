@@ -1,9 +1,8 @@
 "use client";
-import React, { useState ,useEffect} from "react";
+import React from "react";
 import { Card, CardHeader, CardContent } from "@/components/issy/ui/card";
 import Wavetable  from "@/components/issy/Wavetable";
 import Tooltip  from "@/components/issy/Tooltip";
-import * as echarts from "echarts";
 import "@/app/globals.css"
 export default function DashboardPage() {
   return (

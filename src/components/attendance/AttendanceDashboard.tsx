@@ -1,13 +1,9 @@
 import React, { useState } from 'react';
 import { Grid, Box, Typography} from '@mui/material';
-import { useAttendanceData } from '../../hooks/useAttendanceData';
-import { useFilters } from '../../hooks/useFilters';
-import { GlobalFilters } from './GlobalFilters';
 import { DonutChart } from './DonutChart';
 import { LineChart } from './LineChart';
 import { BarChart }  from './BarChart';
 import { RadarChart }  from './RadarChart';
-import { DragAndDrop } from  './DragAndDrop';
 import { DraggableMetrics } from './DraggableMetrics';
 import { ColorPickerChart } from './ColorPickerChart';
 import { GridTable } from './GridTable';

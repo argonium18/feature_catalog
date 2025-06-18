@@ -5,10 +5,8 @@ import * as echarts from "echarts";
 import "@/app/globals.css"
 import {
   Card,
-  CardHeader,
   CardContent,
   Typography,
-  Box,
 } from '@mui/material';
 export default function DashboardPage() {
   const [highlightDate, setHighlightDate] = useState<string | null>(null);
