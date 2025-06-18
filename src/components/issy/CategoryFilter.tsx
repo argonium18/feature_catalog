@@ -7,7 +7,6 @@ import { Checkbox } from '@mui/material';
 
 export default function Page() {
   const [includedCategories, setIncludedCategories] = useState<string[]>(() => Array.from(new Set(rawData.map(d => d.category))));
-  const [includedRegions, setIncludedRegions] = useState<string[]>(() => Array.from(new Set(rawData.map(d => d.region))));
 
   const dates = useMemo(() => Array.from(new Set(rawData.map(d => d.date))).sort(), [rawData]);
 

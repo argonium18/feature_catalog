@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Box,
 } from '@mui/material';
 import TimeSeriesFilterTooltipHover from "@/components/issy/TimeSeriesFilterTooltipHover"
 export default function  TimeSeriesFilterTooltipHoverWrapper () {

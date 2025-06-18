@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Box,
 } from '@mui/material';
 import TimeSeriesFilter from "@/components/issy/TimeSeriesFilter"
 export default function  TimeSeriesFilterWrapper () {

@@ -2,10 +2,8 @@
 import Wavetable  from "@/components/issy/Wavetable";
 import {
   Card,
-  CardHeader,
   CardContent,
   Typography,
-  Box,
 } from '@mui/material';
 export default function WavetableWrapper() {
   return (

@@ -3,8 +3,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Chip,
-  Box,
 } from '@mui/material';
 import SortGraph from "@/components/issy/SortGraph"
 

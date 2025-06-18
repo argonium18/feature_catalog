@@ -3,7 +3,6 @@ import type {
   LineChartDataItem,
   BarChartDataItem,
   RadarChartDataItem,
-  HeaderDef
 } from '../types/attendance';
 import { 
   ATTENDANCE_RATE_COLORS, 
