@@ -107,15 +107,17 @@ export default function Page() {
 
   const vMin = Math.min(...value);
   const vMax = Math.max(...value);
+  const mStart = (sliceIndex / size) * maxM;
+  const mEnd = ((sliceIndex + 1) / size) * maxM;
+
 
   return (
     <div className="grid grid-cols-2 gap-4">
       <Card  className="col-span-1">
-        <CardHeader>ツールチップ</CardHeader>
+        <CardHeader>ウェーブテーブル型BI</CardHeader>
         <CardContent>
           <h2>
-            M軸のスライス位置: {sliceIndex} (Monetary ~{" "}
-            {(sliceIndex / (size - 1) * maxM).toFixed(2)})
+            M軸のスライス位置: {sliceIndex} (Monetary: {mStart.toFixed(2)} ~ {mEnd.toFixed(2)})
           </h2>
 
           <input
