@@ -8,7 +8,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Box,
 } from '@mui/material';
 
 export default function ChurnDashboardWrapper() {

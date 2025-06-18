@@ -1,7 +1,7 @@
 // ChurnRiskHistogram.tsx
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef} from "react";
 import * as echarts from "echarts";
 import type { ChurnPredict } from "@/components/issy/data/churnPredict";
 
