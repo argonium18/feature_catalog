@@ -1,35 +1,67 @@
 import React, { useState } from 'react';
-import { BarChart, Bar, XAxis, YAxis, Tooltip, Cell, CartesianGrid } from 'recharts';
-import { Box, Typography, IconButton, Paper, Card, CardContent } from '@mui/material';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  Cell,
+  CartesianGrid,
+} from 'recharts';
+import {
+  Box,
+  Typography,
+  IconButton,
+  Paper,
+  Card,
+  CardContent,
+} from '@mui/material';
+
+// ----------------------------
+// ✅ バーのデータ型を定義
+type BarData = {
+  name: string;
+  value: number;
+  color: string;
+};
+
+// ----------------------------
+// ✅ Tooltip の props 型
+type CustomTooltipProps = {
+  active?: boolean;
+  payload?: any;
+  label?: string;
+};
 
 export const ColorPickerChart = () => {
-  const colors = [ '#91CC75', '#5470C6', '#EE6666','#FAC858', '#73C0DE'];
+  const colors = ['#91CC75', '#5470C6', '#EE6666', '#FAC858', '#73C0DE'];
 
-  
-  const [data, setData] = useState([
+  const [data, setData] = useState<BarData[]>([
     { name: '月', value: 120, color: colors[0] },
     { name: '火', value: 200, color: colors[0] },
     { name: '水', value: 150, color: colors[0] },
     { name: '木', value: 80, color: colors[0] },
     { name: '金', value: 70, color: colors[0] },
     { name: '土', value: 110, color: colors[0] },
-    { name: '日', value: 130, color: colors[0] }
+    { name: '日', value: 130, color: colors[0] },
   ]);
 
-  const [selectedBar, setSelectedBar] = useState(null);
+  const [selectedBar, setSelectedBar] = useState<number | null>(null);
 
-  const handleBarClick = (_, index) => {
+  const handleBarClick = (_: any, index: number) => {
     setSelectedBar(selectedBar === index ? null : index);
   };
 
-  const changeColor = (colorIndex) => {
-    setData(prev => prev.map((item, idx) => 
-      idx === selectedBar ? { ...item, color: colors[colorIndex] } : item
-    ));
+  const changeColor = (colorIndex: number) => {
+    setData((prev) =>
+      prev.map((item, idx) =>
+        idx === selectedBar ? { ...item, color: colors[colorIndex] } : item
+      )
+    );
     setSelectedBar(null);
   };
 
-  const CustomTooltip = ({ active, payload, label }) => {
+  const CustomTooltip: React.FC<CustomTooltipProps> = ({ active, payload, label }) => {
     if (!active || !payload?.length) return null;
     return (
       <Paper sx={{ p: 1.5 }}>
@@ -48,55 +80,60 @@ export const ColorPickerChart = () => {
     <Card variant="outlined" sx={{ p: 2, height: '100%', flexGrow: 1 }}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-            棒グラフ
+          棒グラフ
         </Typography>
-        <Typography variant="body2" color="text.secondary" >
-            データの数量を棒の長さで視覚的に表現するグラフの一種。売上の月別推移やアンケート結果の集計など、数量の比較が重要な場面で活用される
+        <Typography variant="body2" color="text.secondary">
+          データの数量を棒の長さで視覚的に表現するグラフの一種。売上の月別推移やアンケート結果の集計など、数量の比較が重要な場面で活用される
         </Typography>
+
         <BarChart
-            width={600}
-            height={300}
-            data={data}
-            margin={{ top: 20, right: 30, bottom: 20, left: 20 }}
+          width={600}
+          height={300}
+          data={data}
+          margin={{ top: 20, right: 30, bottom: 20, left: 20 }}
         >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis />
-            <Tooltip content={<CustomTooltip />} />
-            <Bar dataKey="value" onClick={handleBarClick} style={{ cursor: 'pointer' }}>
+          <CartesianGrid strokeDasharray="3 3" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <Tooltip content={<CustomTooltip />} />
+          <Bar
+            dataKey="value"
+            onClick={handleBarClick}
+            style={{ cursor: 'pointer' }}
+          >
             {data.map((entry, idx) => (
-                <Cell 
-                key={idx} 
+              <Cell
+                key={`cell-${idx}`}
                 fill={entry.color}
                 stroke={selectedBar === idx ? '#000' : 'none'}
                 strokeWidth={2}
-                />
+              />
             ))}
-            </Bar>
+          </Bar>
         </BarChart>
 
         {selectedBar !== null && (
-            <Paper sx={{ mt: 2, p: 2 }}>
+          <Paper sx={{ mt: 2, p: 2 }}>
             <Typography variant="h6" gutterBottom>
-                {data[selectedBar].name}の色を選択
+              {data[selectedBar].name}の色を選択
             </Typography>
             <Box sx={{ display: 'flex', gap: 1 }}>
-                {colors.map((color, idx) => (
+              {colors.map((color, idx) => (
                 <IconButton
-                    key={idx}
-                    onClick={() => changeColor(idx)}
-                    sx={{
+                  key={idx}
+                  onClick={() => changeColor(idx)}
+                  sx={{
                     width: 40,
                     height: 40,
                     backgroundColor: color,
-                    '&:hover': { backgroundColor: color, opacity: 0.8 }
-                    }}
+                    '&:hover': { backgroundColor: color, opacity: 0.8 },
+                  }}
                 />
-                ))}
+              ))}
             </Box>
-            </Paper>
+          </Paper>
         )}
-       </CardContent>
+      </CardContent>
     </Card>
   );
 };

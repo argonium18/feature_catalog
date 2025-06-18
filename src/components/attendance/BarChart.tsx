@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   Typography,
+  Box,
 } from '@mui/material';
 import ReactECharts from 'echarts-for-react';
 import { createBarChartOption } from '../../utils/chartOptions'
