@@ -3,10 +3,8 @@ import {
   Card,
   CardContent,
   Typography,
-  Chip,
-  Box,
 } from '@mui/material';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import { getColumns } from '../../utils/chartOptions'
 import { useQuery } from '@tanstack/react-query';
 import { fetchTableData } from '../../services/attendanceApi';

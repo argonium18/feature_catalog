@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Box,
 } from '@mui/material';
 import AccentDiffFilter from "@/components/issy/AccentDiffFilter"
 export default function  CategoryFilterWrapper () {

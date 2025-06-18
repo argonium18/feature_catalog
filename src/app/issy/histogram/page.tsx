@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { churnPredict } from "@/components/issy/data/churnPredict";
 import ChurnRiskHistogram from "@/components/issy/ChurnRiskHistogram";
 import ChurnRiskRanking from "@/components/issy/ChurnRiskRanking";
-import { Card, CardHeader, CardContent } from "@/components/issy/ui/card";
+import { Card,  CardContent } from "@/components/issy/ui/card";
 
 export default function ChurnDashboardWrapper() {
   const [alertThreshold, setAlertThreshold] = useState(0.8);

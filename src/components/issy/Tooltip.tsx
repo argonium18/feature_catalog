@@ -6,6 +6,7 @@ import Popover from "@mui/material/Popover";
 import Checkbox from "@mui/material/Checkbox";
 import TextField from "@mui/material/TextField";
 import Button from "@mui/material/Button";
+import type { ECElementEvent } from "echarts";
 
 // -------------------------------
 // 1️⃣ 商品テーブル
@@ -81,10 +82,7 @@ export default function Page() {
           ? {
               data: [
                 {
-                  coord: [
-                    highlight.dataIndex,
-                    s.data[highlight.dataIndex],
-                  ],
+                  coord: [highlight.dataIndex, s.data[highlight.dataIndex]],
                   symbol: "circle",
                   symbolSize: 20,
                   itemStyle: {
@@ -98,26 +96,28 @@ export default function Page() {
   };
 
   // -------------------------------
-  // 6️⃣ クリックハンドラ
+  // 6️⃣ クリックハンドラ (型付き & fallback)
   // -------------------------------
-  const handleClick = (params: any) => {
-    const itemId = params.seriesName; // P1, P2, ...
-    const info = productData.find((p) => p.id === itemId);
+  const handleClick = (params: ECElementEvent) => {
+  const itemId = params.seriesName ?? "";
+  const info = productData.find((p) => p.id === itemId);
 
-    setSelectedPoint({
-      itemId,
-      date: params.name,
-      value: params.data,
-      product: info,
-    });
+  setSelectedPoint({
+    itemId,
+    date: String(params.name),
+    value: Number(params.data),
+    product: info,
+  });
 
-    setHighlight({
-      seriesName: params.seriesName,
-      dataIndex: params.dataIndex,
-    });
+  setHighlight({
+    seriesName: itemId,
+    dataIndex: params.dataIndex,
+  });
 
-    setAnchorEl(params.event.event.target as HTMLElement);
+  // ✅ event がなければ null にして安全！
+  setAnchorEl((params.event?.event?.target as HTMLElement) ?? null);
   };
+
 
   // -------------------------------
   // 7️⃣ Popover 閉じる
@@ -164,9 +164,7 @@ export default function Page() {
               multiline
               rows={3}
               value={
-                memos[
-                  `${selectedPoint.itemId}:${selectedPoint.date}`
-                ] || ""
+                memos[`${selectedPoint.itemId}:${selectedPoint.date}`] || ""
               }
               onChange={(e) =>
                 saveMemo(

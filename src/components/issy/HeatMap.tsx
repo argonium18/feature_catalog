@@ -7,7 +7,7 @@ import { RFMData } from "@/components/issy/data/RFMData";
 
 const Plot = dynamic(() => import("react-plotly.js"), { ssr: false });
 
-function convertRFMTo3DGrid(records: any[], size = 20) {
+function convertRFMTo3DGrid(records: Record<string, number>[], size = 20) {
   const grid = Array.from({ length: size }, () =>
     Array.from({ length: size }, () => Array(size).fill(0))
   );
@@ -24,6 +24,7 @@ function convertRFMTo3DGrid(records: any[], size = 20) {
 
   return { grid, maxR, maxF, maxM };
 }
+
 
 export default function Page() {
   const size = 20;

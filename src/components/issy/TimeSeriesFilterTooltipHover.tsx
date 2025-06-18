@@ -1,5 +1,5 @@
 "use client";
-
+import type { ECElementEvent } from "echarts";
 import React, { useMemo, useState, useEffect } from "react";
 import ReactECharts from "echarts-for-react";
 import { rawData } from "@/components/issy/data/salesTimeSeries";
@@ -72,11 +72,11 @@ export default function Page() {
   const option = {
     tooltip: {
       trigger: "axis",
-      formatter: (params: any) => {
+      formatter: (params: ECElementEvent[]) => {
         let str = params[0].axisValue + "<br/>";
-        params.forEach((p: any) => {
-          if (allowedTooltipSeries.includes(p.seriesName)) {
-            str += `${p.marker} ${p.seriesName}: ${p.data}<br/>`;
+        params.forEach((p) => {
+          if (p.seriesName && allowedTooltipSeries.includes(p.seriesName)) {
+            str += `${p.marker ?? ""} ${p.seriesName}: ${p.data}<br/>`;
           }
         });
         return str;
