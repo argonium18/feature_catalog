@@ -87,11 +87,14 @@ export default function Page() {
     setHeatmapZ(heatmap);
   }, [sliceIndex, grid]);
 
+  
+  const mStart = (sliceIndex / size) * maxM;
+  const mEnd = ((sliceIndex + 1) / size) * maxM;
+
   return (
     <div style={{ padding: 20 }}>
       <h2>
-        M軸のスライス位置: {sliceIndex} (Monetary ~{" "}
-        {(sliceIndex / (size - 1) * maxM).toFixed(2)})
+        M軸のスライス位置: {sliceIndex} (Monetary: {mStart.toFixed(2)} ~ {mEnd.toFixed(2)})
       </h2>
 
       <input
