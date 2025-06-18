@@ -1,18 +1,18 @@
 "use client";
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import ReactECharts from "echarts-for-react";
-import {   FormControl,
-  InputLabel,
-  Select,
-  MenuItem,Checkbox,Typography } from '@mui/material';
+import { FormControl, InputLabel, Select, MenuItem, Checkbox, Typography } from "@mui/material";
+import type { ECElementEvent } from "echarts";
+
+type DataRow = Record<string, string | number | null | undefined>;
 
 type DynamicFilterChartProps = {
-  inputData: { [key: string]: any }[];
+  inputData: DataRow[];
   availableKeys: string[];
   xKey: string;
   yKey: string;
-  onFiltered?: (filteredData: { [key: string]: any }[]) => void;
+  onFiltered?: (filteredData: DataRow[]) => void;
   highlightDate: string | null;
   onDateClick: (date: string | null) => void;
 };
@@ -28,27 +28,37 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
 }: DynamicFilterChartProps) {
   const [filterKey, setFilterKey] = useState<string>("");
   const [excludedValues, setExcludedValues] = useState<string[]>([]);
-  const onFilteredMemo = React.useRef<string>("");
+  const onFilteredMemo = useRef<string>("");
 
-  if (!inputData || inputData.length === 0) {
-    return <div>データがありません</div>;
-  }
+  // ✅ Hooks はトップレベル
+  const isEmpty = !inputData || inputData.length === 0;
 
-  const sortedInputData = [...inputData].sort((a, b) => a[xKey].localeCompare(b[xKey]));
+  const sortedInputData = useMemo(() => {
+    if (isEmpty) return [];
+    return [...inputData].sort((a, b) =>
+      String(a[xKey]).localeCompare(String(b[xKey]))
+    );
+  }, [inputData, xKey, isEmpty]);
 
-  const availableValues = filterKey
-    ? Array.from(new Set(sortedInputData.map((d) => d[filterKey])))
-    : [];
+  const availableValues = useMemo(() => {
+    if (!filterKey) return [];
+    return Array.from(new Set(sortedInputData.map((d) => String(d[filterKey]))));
+  }, [filterKey, sortedInputData]);
 
-  const filteredData = !filterKey
-    ? sortedInputData
-    : sortedInputData.filter((d) => !excludedValues.includes(d[filterKey]));
+  const filteredData = useMemo(() => {
+    if (!filterKey) return sortedInputData;
+    return sortedInputData.filter(
+      (d) => !excludedValues.includes(String(d[filterKey]))
+    );
+  }, [filterKey, excludedValues, sortedInputData]);
 
-  const filteredAndReducedData = filteredData.map((d) => {
-    const newObj = { ...d };
-    if (filterKey) delete newObj[filterKey];
-    return newObj;
-  });
+  const filteredAndReducedData = useMemo(() => {
+    return filteredData.map((d) => {
+      const newObj = { ...d };
+      if (filterKey) delete newObj[filterKey];
+      return newObj;
+    });
+  }, [filteredData, filterKey]);
 
   useEffect(() => {
     if (onFiltered) {
@@ -63,8 +73,8 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
   const aggregatedOriginal = useMemo(() => {
     const map = new Map<string, number>();
     for (const d of sortedInputData) {
-      const date = d[xKey];
-      map.set(date, (map.get(date) ?? 0) + d[yKey]);
+      const date = String(d[xKey]);
+      map.set(date, (map.get(date) ?? 0) + Number(d[yKey]));
     }
     return map;
   }, [sortedInputData, xKey, yKey]);
@@ -72,24 +82,37 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
   const aggregatedFiltered = useMemo(() => {
     const map = new Map<string, number>();
     for (const d of filteredData) {
-      const date = d[xKey];
-      map.set(date, (map.get(date) ?? 0) + d[yKey]);
+      const date = String(d[xKey]);
+      map.set(date, (map.get(date) ?? 0) + Number(d[yKey]));
     }
     return map;
   }, [filteredData, xKey, yKey]);
 
   const dates = useMemo(
-    () => Array.from(new Set(sortedInputData.map((d) => d[xKey]))).sort(),
+    () =>
+      Array.from(new Set(sortedInputData.map((d) => String(d[xKey])))).sort(),
     [sortedInputData, xKey]
   );
 
   const diffBase = useMemo(
-    () => dates.map((date) => Math.min(aggregatedOriginal.get(date) ?? 0, aggregatedFiltered.get(date) ?? 0)),
+    () =>
+      dates.map((date) =>
+        Math.min(
+          aggregatedOriginal.get(date) ?? 0,
+          aggregatedFiltered.get(date) ?? 0
+        )
+      ),
     [dates, aggregatedOriginal, aggregatedFiltered]
   );
 
   const diffDelta = useMemo(
-    () => dates.map((date) => Math.abs((aggregatedOriginal.get(date) ?? 0) - (aggregatedFiltered.get(date) ?? 0))),
+    () =>
+      dates.map((date) =>
+        Math.abs(
+          (aggregatedOriginal.get(date) ?? 0) -
+            (aggregatedFiltered.get(date) ?? 0)
+        )
+      ),
     [dates, aggregatedOriginal, aggregatedFiltered]
   );
 
@@ -112,13 +135,11 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
           type: "line",
           data: dates.map((date) => aggregatedOriginal.get(date) ?? 0),
           lineStyle: { type: "dotted" },
-          smooth: false,
         },
         {
           name: "フィルター後合計",
           type: "line",
           data: dates.map((date) => aggregatedFiltered.get(date) ?? 0),
-          smooth: false,
         },
         {
           name: "差分ベース",
@@ -146,8 +167,10 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
             itemStyle: { color: "rgba(255, 0, 0, 0.1)" },
             label: {
               show: true,
-              formatter: (params: any) => {
-                const dateStr = params.name || (Array.isArray(params.value) && params.value[0]);
+              formatter: (params: ECElementEvent) => {
+                const dateStr =
+                  params.name ||
+                  (Array.isArray(params.value) && params.value[0]);
                 if (typeof dateStr === "string") {
                   const [yyyy, mm] = dateStr.split("-");
                   return `${yyyy}-${mm}`;
@@ -162,7 +185,7 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
               borderWidth: 1,
               borderRadius: 4,
               padding: [2, 6],
-            }
+            },
           },
           tooltip: { show: false },
           z: 98,
@@ -177,7 +200,18 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
         },
       ],
     };
-  }, [dates, aggregatedOriginal, aggregatedFiltered, diffBase, diffDelta, highlightDate]);
+  }, [
+    dates,
+    aggregatedOriginal,
+    aggregatedFiltered,
+    diffBase,
+    diffDelta,
+    highlightDate,
+  ]);
+
+  if (isEmpty) {
+    return <div>データがありません</div>;
+  }
 
   return (
     <div style={{ padding: "1rem", border: "1px solid #ccc", borderRadius: "8px", marginBottom: "2rem" }}>
@@ -195,7 +229,9 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
           >
             <MenuItem value="">未選択</MenuItem>
             {availableKeys.map((key) => (
-              <MenuItem key={key} value={key}>{key}</MenuItem>
+              <MenuItem key={key} value={key}>
+                {key}
+              </MenuItem>
             ))}
           </Select>
         </FormControl>
@@ -203,14 +239,16 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
 
       {filterKey && (
         <div style={{ marginBottom: "1rem" }}>
-          <Typography>除外する{filterKey}:</Typography>
+          <Typography>除外する {filterKey}:</Typography>
           {availableValues.map((val) => (
             <label key={val} style={{ marginRight: "1rem" }}>
               <Checkbox
                 checked={excludedValues.includes(val)}
                 onChange={(e) => {
                   setExcludedValues((prev) =>
-                    e.target.checked ? [...prev, val] : prev.filter((v) => v !== val)
+                    e.target.checked
+                      ? [...prev, val]
+                      : prev.filter((v) => v !== val)
                   );
                 }}
               />
@@ -221,16 +259,20 @@ const DynamicFilterChart = React.memo(function DynamicFilterChart({
       )}
 
       <ReactECharts
-        notMerge={true}
+        notMerge
         lazyUpdate={false}
         option={option}
         style={{ height: "400px" }}
-        onChartReady={(chart) => { chart.group = "linked-group"; }}
+        onChartReady={(chart) => {
+          chart.group = "linked-group";
+        }}
         onEvents={{
-          click: (params: any) => {
+          click: (params: ECElementEvent) => {
             console.log("🟥 グラフでクリックされた:", params);
             if (params.seriesName === "クリックゾーン") {
-              const date = params.name || (Array.isArray(params.value) && params.value[0]);
+              const date =
+                params.name ||
+                (Array.isArray(params.value) && params.value[0]);
               if (onDateClick && typeof date === "string") {
                 onDateClick(date);
               }
