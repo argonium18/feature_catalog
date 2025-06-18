@@ -67,12 +67,12 @@ export default function AttendanceDashboard() {
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               指標表示
           </Typography>
-          <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
-            <LinearGaugeAutoWrapper/>
-          </Grid>
-          <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
-            <LinearGaugeWrapper/>
-          </Grid>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+          <LinearGaugeAutoWrapper/>Add commentMore actions
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+          <LinearGaugeWrapper/>
         </Grid>
       </Grid>
 
