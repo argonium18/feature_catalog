@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState} from "react";
 import ReactECharts from "echarts-for-react";
 import { rawData } from "@/components/issy/data/salesTimeSeries";
 import {

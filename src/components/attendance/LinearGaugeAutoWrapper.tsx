@@ -5,7 +5,6 @@ import {
   Card,
   CardContent,
   Typography,
-  Box,
 } from '@mui/material';
 function formatJapaneseNumber(num: number) {
   const oku = Math.floor(num / 100_000_000);

@@ -9,7 +9,6 @@ import {
   Typography,
 } from '@mui/material';
 export default function DashboardPage() {
-  const [highlightDate, setHighlightDate] = useState<string | null>(null);
   useEffect(() => {
     echarts.disconnect("linked-group");
     echarts.connect("linked-group");

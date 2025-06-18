@@ -1,27 +1,24 @@
-// DragAndDrop.tsx
 import React, { useState } from 'react';
 import { Box } from '@mui/material';
 import { useAttendanceData } from '../../hooks/useAttendanceData';
 import { useFilters } from '../../hooks/useFilters';
 import { DonutChart } from './DonutChart';
 import { LineChart } from './LineChart';
-import { BarChart} from './BarChart';
+import { BarChart } from './BarChart';
 import { DraggableWrapper } from '../DraggableWrapper';
 
 export function DragAndDrop() {
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  const selectedRows: number[] = [];
   const [chartOrder, setChartOrder] = useState<string[]>(['donut', 'line', 'bar']);
 
   const {
     globalFilters,
-    lineChartFilters,
     barChartFilters,
-    handleGlobalFilterChange,
-    handleLineChartFilterChange,
     handleBarChartFilterChange
   } = useFilters();
 
-  const { summary, students, timeSeries, barData } = useAttendanceData(
+  // ✅ 使ってない summary, students, timeSeries は受け取らない
+  const { barData } = useAttendanceData(
     globalFilters, 
     selectedRows,
   );

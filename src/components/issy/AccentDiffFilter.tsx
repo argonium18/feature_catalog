@@ -7,8 +7,6 @@ import { Checkbox } from '@mui/material';
 
 export default function Page() {
   const [includedCategories, setIncludedCategories] = useState<string[]>(() => Array.from(new Set(rawData.map(d => d.category))));
-  const [includedRegions, setIncludedRegions] = useState<string[]>(() => Array.from(new Set(rawData.map(d => d.region))));
-
   const dates = useMemo(() => Array.from(new Set(rawData.map(d => d.date))).sort(), [rawData]);
 
   // グラフ1：商品カテゴリフィルター後のデータ
@@ -31,19 +29,6 @@ export default function Page() {
       return { date, sales: sum };
     });
   }, [categoryFilteredData, dates]);
-
-  // グラフ2：地域フィルター後のデータ
-  const regionFilteredData = useMemo(() => {
-    return categoryFilteredData.filter(d => includedRegions.includes(d.region));
-  }, [categoryFilteredData, includedRegions]);
-
-  // グラフ2：時系列売上（フィルター後）
-  const filteredSeries2 = useMemo(() => {
-    return dates.map(date => {
-      const sum = regionFilteredData.filter(d => d.date === date).reduce((a, b) => a + b.sales, 0);
-      return { date, sales: sum };
-    });
-  }, [regionFilteredData, dates]);
 
   const makeOption = (original: { date: string; sales: number }[], filtered: { date: string; sales: number }[]) => {
     const diffBase = original.map((d, i) => Math.min(original[i].sales, filtered[i].sales));
