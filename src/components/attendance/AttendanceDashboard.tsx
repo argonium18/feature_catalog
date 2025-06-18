@@ -22,9 +22,6 @@ import HeatMapChart from './HeatMapChart'
 import WavetableWrapper from './WavetableWrapper'
 
 export default function AttendanceDashboard() {
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
-  
-
   return (
     <Box sx={{ width: '100%', maxWidth: { sm: '100%', md: '1700px' }, py : 4 , '& > *': { p: 4 }}}>
       <Typography variant="h3" gutterBottom sx={{ fontWeight: "bold" }}>

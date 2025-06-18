@@ -5,13 +5,14 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  SelectChangeEvent, 
 } from '@mui/material';
 import type { Filters } from '../../types/attendance';
 import { CLASSES, SUBJECTS } from '../../constants/attendance';
 
 interface GlobalFiltersProps {
   filters: Filters;
-  onFilterChange: (key: keyof Filters) => (e: any) => void;
+  onFilterChange: (key: keyof Filters) => (e: SelectChangeEvent) => void; 
 }
 
 export const GlobalFilters: React.FC<GlobalFiltersProps> = ({
@@ -20,7 +21,7 @@ export const GlobalFilters: React.FC<GlobalFiltersProps> = ({
 }) => {
   return (
     <Grid container spacing={2} columns={12}>
-      <Grid item size={{ xs: 12, sm: 6, lg: 1 }}>
+      <Grid item xs={12} sm={6} lg={1}> {/* ✅ 'size' → 'xs' */}
         <FormControl fullWidth>
           <InputLabel>クラス</InputLabel>
           <Select 
@@ -36,7 +37,7 @@ export const GlobalFilters: React.FC<GlobalFiltersProps> = ({
           </Select>
         </FormControl>
       </Grid>
-      <Grid item size={{ xs: 12, sm: 6, lg: 1 }}>
+      <Grid item xs={12} sm={6} lg={1}> {/* ✅ 'size' → 'xs' */}
         <FormControl fullWidth>
           <InputLabel>科目</InputLabel>
           <Select 
