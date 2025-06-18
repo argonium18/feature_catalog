@@ -29,55 +29,55 @@ export default function AttendanceDashboard() {
       </Typography>
 
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               チャート描画
           </Typography>
         </Grid>
-        <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <DonutChart/>
         </Grid>
-        <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <LineChart/>
         </Grid>
-        <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <BarChart/>
         </Grid>
-        <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <RadarChart/>
         </Grid>
-        <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <HeatMapChart/>
         </Grid>
       </Grid>
 
       <Grid container spacing={2} columns={12} sx={{ mb: 2 , py: 2}}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{fontWeight: "bold" }}>
               テーブル表示
           </Typography>
         </Grid>
-        <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 12 }}>
           <GridTable/>
         </Grid>
       </Grid>
 
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               指標表示
           </Typography>
-          <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+          <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
             <LinearGaugeAutoWrapper/>
           </Grid>
-          <Grid item size={{ xs: 12, sm: 6, lg: 6 }}>
+          <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
             <LinearGaugeWrapper/>
           </Grid>
         </Grid>
       </Grid>
 
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               色替え棒グラフ
           </Typography>
@@ -86,7 +86,7 @@ export default function AttendanceDashboard() {
       </Grid>
 
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               ドラッグ&ドロップ
           </Typography>
@@ -95,78 +95,78 @@ export default function AttendanceDashboard() {
       </Grid>
 
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               フィルタリング
           </Typography>
         </Grid>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <CategoryFilterWrapper/>
         </Grid>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <TimeSeriesFilterWrapper/>
         </Grid>
       </Grid>
 
       
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               ソート
           </Typography>
         </Grid>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <SortGraphWrapper/>
         </Grid>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <GroupBarWrapper/>
         </Grid>
       </Grid>
 
         <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-          <Grid item size={{ xs: 12 }}>
+          <Grid size={{ xs: 12 }}>
             <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
                 アラート表示
             </Typography>
           </Grid>
-        <Grid item size={{ xs: 12, sm: 6, lg: 12 }}>
+        <Grid size={{ xs: 12, sm: 6, lg: 12 }}>
           <ChurnDashboardWrapper/>
         </Grid>
       </Grid>
             <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               アクセント
           </Typography>
         </Grid>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <AccentDiff/>
         </Grid>
       </Grid>
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               インタラクティブなUI
           </Typography>
         </Grid>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <TimeSeriesFilterTooltipHoverWrapper/>
         </Grid>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <CascadeFilterWrapper/>
         </Grid>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <FocusSortDash/>
         </Grid>
       </Grid>
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               実験的なUI
           </Typography>
         </Grid>
         
-        <Grid item size={{ xs: 12 }}>
+        <Grid size={{ xs: 12 }}>
           <WavetableWrapper/>
         </Grid>
       </Grid>

@@ -21,7 +21,8 @@ export const GlobalFilters: React.FC<GlobalFiltersProps> = ({
 }) => {
   return (
     <Grid container spacing={2} columns={12}>
-      <Grid item xs={12} sm={6} lg={1}> {/* ✅ 'size' → 'xs' */}
+      
+      <Grid size={{ xs: 12, sm: 6, lg: 1 }}>
         <FormControl fullWidth>
           <InputLabel>クラス</InputLabel>
           <Select 
@@ -37,7 +38,7 @@ export const GlobalFilters: React.FC<GlobalFiltersProps> = ({
           </Select>
         </FormControl>
       </Grid>
-      <Grid item xs={12} sm={6} lg={1}> {/* ✅ 'size' → 'xs' */}
+      <Grid size={{ xs: 12, sm: 6, lg: 1 }}>
         <FormControl fullWidth>
           <InputLabel>科目</InputLabel>
           <Select 
