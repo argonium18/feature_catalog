@@ -12,7 +12,7 @@ export default function  CategoryFilterWrapper () {
         <Typography variant="h6" gutterBottom>
           カテゴリフィルター
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography>
           カテゴリデータを用いて折れ線グラフを動的にフィルタリングすることができます。<br/>
           とある小売店の2年間の売り上げの推移のグラフを商品カテゴリで絞ってみましょう。
         </Typography>

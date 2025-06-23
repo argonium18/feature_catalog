@@ -12,7 +12,7 @@ export default function  TimeSeriesFilterTooltipHoverWrapper () {
         <Typography variant="h6" gutterBottom>
           ホバーするツールチップ
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography >
           時系列フィルターにホバーするツールチップを追加しています。<br/>
           カーソルを乗せた時点のデータの日付、フィルター前の値、フィルター後の値、差分を表示します。<br/>
           これによって直観的に値を選択しながら詳細な値を知ることができます。

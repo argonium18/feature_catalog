@@ -78,10 +78,10 @@ export const ColorPickerChart = () => {
     <Card variant="outlined" sx={{ p: 2, height: '100%', flexGrow: 1 }}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
-          棒グラフ
+          色変え可能棒グラフ
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          データの数量を棒の長さで視覚的に表現するグラフの一種。売上の月別推移やアンケート結果の集計など、数量の比較が重要な場面で活用される
+          まず、色変えの基本として各棒グラフの色を変更する機能を実装しています。<br/>
         </Typography>
 
         <BarChart

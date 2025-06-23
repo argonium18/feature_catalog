@@ -21,7 +21,7 @@ export default function DashboardPage() {
             <Typography variant="h6" gutterBottom>
               複数のグラフの連動
             </Typography>
-            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+            <Typography>
                 とある小売業の売り上げデータを日付でソートしたグラフと売り上げでソートしたグラフを表示しています。<br/>
                 折れ線グラフ上の日付（X軸）をクリックすることで、その月の売上データが自動的に抽出され、棒グラフに反映されます。<br/>
                 これにより、特定期間における売上の詳細を視覚的に把握できます。<br/>

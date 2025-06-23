@@ -19,7 +19,7 @@ export default function DashboardPage() {
         <Typography variant="h6" gutterBottom>
             グループ別ソート機能
         </Typography>
-        <Typography variant="body2" color="text.secondary" >
+        <Typography>
             「モード切替」ボタンを押すことで、カテゴリ（例：地域）ごとにグループ化された表示に切り替えることができ、各グループ内での順位や傾向も把握できます。<br/>
         </Typography>
         {/* 棒グラフ */}

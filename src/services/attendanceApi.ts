@@ -34,14 +34,14 @@ export const fetchTimeSeries = async (): Promise<LineChartDataItem[]> => {
 //レーダーチャートデータの取得
 export const fetchScore = async (): Promise<RadarChartDataItem[]> => {
   return [
-    { subject: '代数', score: 85 },
-    { subject: '幾何', score: 90 },
-    { subject: '微分', score: 78 },
-    { subject: '積分', score: 88 },
-    { subject: '確率', score: 92 },
-    { subject: '統計', score: 80 },
-    { subject: 'ベクトル', score: 75 },
-    { subject: '数列', score: 89 },
+    { subject: '国語', score: 45 },
+    { subject: '英語', score: 80 },
+    { subject: '数学', score: 28 },
+    { subject: '物理', score: 60 },
+    { subject: '化学', score: 92 },
+    { subject: '歴史', score: 100 },
+    { subject: '地理', score: 75 },
+    { subject: '公民', score: 89 },
   ];
 };
 

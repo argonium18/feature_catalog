@@ -12,7 +12,7 @@ export default function WavetableWrapper() {
         <Typography variant="h6" gutterBottom>
           立体スライサー
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography >
           RFMなどの多次元のデータを3次元グリッドにマッピングし、立体構造として捉えることができます。<br/>
           R（Recency）軸、F（Frequency）軸、M（Monetary）軸を立体座標として扱い、顧客行動の分布を空間的に把握します。<br/>
           ヒートマップでは2軸の断面を切り出し、スライス操作でM軸の位置を自由に変更できます。<br/>

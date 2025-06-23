@@ -12,7 +12,7 @@ export default function  CategoryFilterWrapper () {
         <Typography variant="h6" gutterBottom>
           差分の着色
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography>
           抽出前との差分が赤い領域で表示されます。<br/>
         </Typography>
         <Typography variant="body1" gutterBottom component="div">
