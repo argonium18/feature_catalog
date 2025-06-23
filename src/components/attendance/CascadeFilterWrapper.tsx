@@ -20,7 +20,7 @@ export default function DashboardPage() {
         <Typography variant="h6" gutterBottom>
             段階フィルター
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+        <Typography>
             「フィルター対象」を選択することで、特定のカテゴリによる絞り込みが可能です。<br/>
             「フィルターを追加」ボタンを押すことで、さらにドリルダウンして複数段階のフィルターを適用できます。<br/>
             また、グラフのX軸付近をクリックするとその日付のデータがハイライトされます。<br/>

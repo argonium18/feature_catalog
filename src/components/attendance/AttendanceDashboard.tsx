@@ -31,7 +31,12 @@ export default function AttendanceDashboard() {
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              チャート描画
+              基本的なチャート描画
+          </Typography>
+        </Grid>
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h5" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              グラフの描画
           </Typography>
         </Grid>
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
@@ -49,54 +54,40 @@ export default function AttendanceDashboard() {
         <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
           <HeatMapChart/>
         </Grid>
-      </Grid>
+        <Grid container spacing={2} columns={12} sx={{ mb: 2 , py: 2}}>
+          <Grid size={{ xs: 12 }}>
+            <Typography variant="h5" gutterBottom sx={{fontWeight: "bold" }}>
+                テーブル表示
+            </Typography>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6, lg: 12 }}>
+            <GridTable/>
+          </Grid>
+        </Grid>
 
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 , py: 2}}>
-        <Grid size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{fontWeight: "bold" }}>
-              テーブル表示
-          </Typography>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 12 }}>
-          <GridTable/>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              指標表示
-          </Typography>
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
-          <LinearGaugeAutoWrapper/>Add commentMore actions
-        </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
-          <LinearGaugeWrapper/>
-        </Grid>
-      </Grid>
-
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              色替え棒グラフ
-          </Typography>
-          <ColorPickerChart/>
+        <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+          <Grid size={{ xs: 12 }}>
+            <Typography variant="h5" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+                指標表示
+            </Typography>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+            <LinearGaugeAutoWrapper/>
+          </Grid>
+          <Grid size={{ xs: 12, sm: 6, lg: 6 }}>
+            <LinearGaugeWrapper/>
+          </Grid>
         </Grid>
       </Grid>
 
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              ドラッグ&ドロップ
+              表示するデータの操作
           </Typography>
-          <DraggableMetrics/>
         </Grid>
-      </Grid>
-
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+          <Typography variant="h5" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               フィルタリング
           </Typography>
         </Grid>
@@ -106,12 +97,8 @@ export default function AttendanceDashboard() {
         <Grid size={{ xs: 12 }}>
           <TimeSeriesFilterWrapper/>
         </Grid>
-      </Grid>
-
-      
-      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+          <Typography variant="h5" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
               ソート
           </Typography>
         </Grid>
@@ -122,27 +109,47 @@ export default function AttendanceDashboard() {
           <GroupBarWrapper/>
         </Grid>
       </Grid>
-
+      <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+        <Grid size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              UIのカスタマイズ
+          </Typography>
+        </Grid>
+        <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+          <Grid size={{ xs: 12 }}>
+            <Typography variant="h5" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+                色の変更
+            </Typography>
+            <ColorPickerChart/>
+          </Grid>
+        </Grid>
+        <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
+          <Grid size={{ xs: 12 }}>
+            <Typography variant="h5" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+                <br/>位置の変更
+            </Typography>
+            <DraggableMetrics/>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid size={{ xs: 12 }}>
+          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
+              アクセント
+          </Typography>
+        <Grid size={{ xs: 12 }}>
+          <AccentDiff/>
+        </Grid>
+        </Grid>
         <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
           <Grid size={{ xs: 12 }}>
             <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
                 アラート表示
             </Typography>
           </Grid>
-        <Grid size={{ xs: 12, sm: 6, lg: 12 }}>
-          <ChurnDashboardWrapper/>
+          <Grid size={{ xs: 12, sm: 6, lg: 12 }}>
+            <ChurnDashboardWrapper/>
+          </Grid>
         </Grid>
-      </Grid>
-            <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
-        <Grid size={{ xs: 12 }}>
-          <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
-              アクセント
-          </Typography>
-        </Grid>
-        <Grid size={{ xs: 12 }}>
-          <AccentDiff/>
-        </Grid>
-      </Grid>
       <Grid container spacing={2} columns={12} sx={{ mb: 2 }}>
         <Grid size={{ xs: 12 }}>
           <Typography variant="h4" gutterBottom sx={{ px: 1, fontWeight: "bold" }}>
@@ -165,12 +172,10 @@ export default function AttendanceDashboard() {
               実験的なUI
           </Typography>
         </Grid>
-        
         <Grid size={{ xs: 12 }}>
           <WavetableWrapper/>
         </Grid>
       </Grid>
     </Box>
-    
   );
 }
