@@ -3,7 +3,7 @@
 import dynamic from 'next/dynamic';
 import QueryProvider from '@/components/QueryProvider';
 
-const Dashboard = dynamic(() => import('@/components/attendance/AttendanceDashboard'), {
+const Dashboard = dynamic(() => import('@/components/attendance/ShowcaseBI'), {
   ssr: false,
 });
 
